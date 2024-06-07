@@ -16,7 +16,7 @@ const AuctionUpcoming = () => {
   useEffect(() => {
     const fetchAuctionProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/auction/${auctionId}/products`);
+        const response = await axios.get(`https://aronnok.vercel.app/api/auction/${auctionId}/products`);
         setAuctionProducts(response.data);
         console.log(response.data);
       } catch (error) {

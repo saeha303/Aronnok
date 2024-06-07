@@ -18,7 +18,7 @@ const BidPopup = ({ auctionId, productId, userId, currentBid, onClose, }) => {
         console.log(userId);
         console.log(auctionId);
         console.log(productId);
-        await axios.post(`http://localhost:8000/api/auction/${auctionId}/products/${productId}/bid`, {"bidAmount":Number(inputValue) , "bidder": userId});
+        await axios.post(`https://aronnok.vercel.app/api/auction/${auctionId}/products/${productId}/bid`, {"bidAmount":Number(inputValue) , "bidder": userId});
         setState(2);
       } catch (error) {
         console.error('Error bidding', error);

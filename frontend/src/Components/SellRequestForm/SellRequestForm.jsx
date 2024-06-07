@@ -50,7 +50,7 @@ const SellRequestForm = ({ userId,onClose}) => {
       // for (const pair of formData.entries()) {
       //   console.log(pair[0], pair[1]);
       // }
-      await axios.post(`http://localhost:8000/api/sellRequest/${userId}`, formData, {
+      await axios.post(`https://aronnok.vercel.app/api/sellRequest/${userId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -11,7 +11,7 @@
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
-//         const response = await fetch('http://localhost:8000/api/favourites/659c027001b07da1b7fef185');
+//         const response = await fetch('https://aronnok.vercel.app/api/favourites/659c027001b07da1b7fef185');
 //         const data = await response.json();
 //         setProducts(data);
 //       } catch (error) {
@@ -50,12 +50,12 @@ const FavouriteItem = () => {
     const fetchData = async () => {
       try {
         // Fetch user's favorite plant IDs first
-        const response = await axios.get(`http://localhost:8000/api/favourites/${userId}`);
+        const response = await axios.get(`https://aronnok.vercel.app/api/favourites/${userId}`);
         const { product } = response.data;
     
         // Fetch products based on the list of favorite IDs
         if (product && product.length > 0) {
-          const productResponse = await axios.post(`http://localhost:8000/api/favourites`, { favoriteIds: product });
+          const productResponse = await axios.post(`https://aronnok.vercel.app/api/favourites`, { favoriteIds: product });
           setFavoriteProducts(productResponse.data);
         }
       } catch (error) {

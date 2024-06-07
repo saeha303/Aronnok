@@ -32,9 +32,9 @@ const Wishlist = ({ category, mypath, userId, wishlistPlantId }) => {
   const deleteFromWishlist = async (wishlistPlantId) => {
     try {
       if (category === 'Wishlist')
-        await axios.delete(`http://localhost:8000/api/wishlist/${userId}/${wishlistPlantId}`, {});
+        await axios.delete(`https://aronnok.vercel.app/api/wishlist/${userId}/${wishlistPlantId}`, {});
       if (category === 'Favourites')
-        await axios.delete(`http://localhost:8000/api/favourites/${userId}/${wishlistPlantId}`, {});
+        await axios.delete(`https://aronnok.vercel.app/api/favourites/${userId}/${wishlistPlantId}`, {});
     } catch (error) {
       console.error('Error deleting', error);
     }

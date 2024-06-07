@@ -10,7 +10,7 @@ const Home = () => {
   return (
    <div>
       <Navbar userId={userId} menu={"wishlist"}/>
-      <Wishlist category="Wishlist" mypath={`http://localhost:8000/api/wishlist/${userId}`} userId={userId} wishlistPlantId={wishlistPlantId}/>
+      <Wishlist category="Wishlist" mypath={`https://aronnok.vercel.app/api/wishlist/${userId}`} userId={userId} wishlistPlantId={wishlistPlantId}/>
       <Footer/>
     </div>
   );

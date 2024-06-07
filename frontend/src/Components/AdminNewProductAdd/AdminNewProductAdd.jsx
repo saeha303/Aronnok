@@ -75,12 +75,12 @@ const AdminNewProductAdd = () => {
       // for (const pair of formData.entries()) {
       //   console.log(pair[0], pair[1]);
       // }
-      await axios.post('http://localhost:8000/api/product/create/65a294c44865e9f4138c7281', formData, {
+      await axios.post('https://aronnok.vercel.app/api/product/create/65a294c44865e9f4138c7281', formData, {
       headers: {
       'Content-Type': 'multipart/form-data',
       },
       });
-        //   const response = await fetch("http://localhost:8000/api/product/create/65a294c44865e9f4138c7281", {
+        //   const response = await fetch("https://aronnok.vercel.app/api/product/create/65a294c44865e9f4138c7281", {
         //   method: "POST",
         //   body: formData,
     // });

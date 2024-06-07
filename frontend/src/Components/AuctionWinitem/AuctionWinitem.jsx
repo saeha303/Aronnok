@@ -7,7 +7,7 @@ const AuctionWinitem = (prod) => {
 
       const pay = async () => {
           try {
-            const response=await axios.post(`http://localhost:8000/api/auction/${prod.auctionId}/${prod.id}/payment`, {});
+            const response=await axios.post(`https://aronnok.vercel.app/api/auction/${prod.auctionId}/${prod.id}/payment`, {});
             const textUrl=response.data.url;
             
             window.location.href = textUrl;

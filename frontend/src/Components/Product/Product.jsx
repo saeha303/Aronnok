@@ -19,7 +19,7 @@ const Product = (prod) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/favourites/${prod.userId}/isFavourite/${prod.id}`);
+        const response = await fetch(`https://aronnok.vercel.app/api/favourites/${prod.userId}/isFavourite/${prod.id}`);
         const data = await response.json();
         setIsFav(data.flag);
       } catch (error) {
@@ -47,7 +47,7 @@ const Product = (prod) => {
       const addToFavourites = async() => {
         setIsClicked(!isClicked);
         try {
-          await axios.post(`http://localhost:8000/api/favourites/create/${prod.userId}`, { "plantId": prod.id });
+          await axios.post(`https://aronnok.vercel.app/api/favourites/create/${prod.userId}`, { "plantId": prod.id });
         } catch (error) {
           console.error('Error adding', error);
         }

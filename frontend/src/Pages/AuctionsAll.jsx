@@ -35,7 +35,7 @@ const AuctionsAll = () => {
         };
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/auctions`);
+        const response = await fetch(`https://aronnok.vercel.app/api/auctions`);
         const data = await response.json();
         setAuctions(data);
         divideOrders(data);

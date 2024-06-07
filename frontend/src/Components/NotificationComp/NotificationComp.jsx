@@ -21,7 +21,7 @@ const NotificationComp = (prod) => {
     
       const onClose = async () => {
         try {
-          await axios.delete(`http://localhost:8000/api/${prod.userId}/notification/delete/${prod.id}`, {});
+          await axios.delete(`https://aronnok.vercel.app/api/${prod.userId}/notification/delete/${prod.id}`, {});
           // /:userId/notification/delete/:notificationId
         } catch (error) {
           console.error('Error bidding', error);

@@ -11,7 +11,7 @@ const AllUsers = () => {
     useEffect(() => {
         const fetchAuctionProducts = async () => {
           try {
-            const response = await axios.get(`http://localhost:8000/api/getAllUser`);
+            const response = await axios.get(`https://aronnok.vercel.app/api/getAllUser`);
             setUsers(response.data);
           } catch (error) {
             console.error('Error fetching auction products:', error);

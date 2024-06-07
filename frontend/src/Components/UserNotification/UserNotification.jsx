@@ -10,7 +10,7 @@ const UserNotification = ({ userId, onClose }) => {
   useEffect(() => {
     const fetchNotification = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/notification/${userId}`);
+        const response = await fetch(`https://aronnok.vercel.app/api/notification/${userId}`);
         const data = await response.json();
         setNotis(data.messages);
         console.log(data.messages);

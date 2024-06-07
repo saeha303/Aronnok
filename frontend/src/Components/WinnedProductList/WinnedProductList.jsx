@@ -8,7 +8,7 @@ const WinnedProductsList = ({userId}) => {
   useEffect(() => {
     const fetchWinnedProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/userauctioninfoforadmin/${userId}`);
+        const response = await axios.get(`https://aronnok.vercel.app/api/userauctioninfoforadmin/${userId}`);
         setWinnedProducts(response.data);
       } catch (error) {
         console.error('Error fetching won auction products:', error);

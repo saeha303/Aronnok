@@ -24,7 +24,7 @@ const OrderlistAdmin = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch('https://aronnok.vercel.app/api/order/all');
+          const response = await fetch('http://localhost:8000/api/order/all');
           const data = await response.json();
           setOrderHistory(data);
         } catch (error) {

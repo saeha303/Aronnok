@@ -6,7 +6,7 @@ const AdDashOrderItem = (prod) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`https://aronnok.vercel.app/api/user/${prod.userId}`);
+                const response = await fetch(`http://localhost:8000/api/user/${prod.userId}`);
                 const data = await response.json();
                 setUser(data);
             } catch (error) {

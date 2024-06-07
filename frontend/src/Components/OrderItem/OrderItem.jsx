@@ -9,7 +9,7 @@ const OrderItem = (prod) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`https://aronnok.vercel.app/api/product/659c027001b07da1b7fef185/${prod.id}`);
+                const response = await fetch(`http://localhost:8000/api/product/659c027001b07da1b7fef185/${prod.id}`);
                 const data = await response.json();
                 setProduct(data);
             } catch (error) {
@@ -22,7 +22,7 @@ const OrderItem = (prod) => {
      
         const giveRating = async () => {
             // try {
-            //     const response = await fetch(`https://aronnok.vercel.app/api/product/rating/${prod.id}`, {
+            //     const response = await fetch(`http://localhost:8000/api/product/rating/${prod.id}`, {
             //         method: 'PUT',
             //         headers: {
             //             'Content-Type': 'application/json',

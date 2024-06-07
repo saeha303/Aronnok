@@ -14,7 +14,7 @@ const AuctionWinProducts = () => {
         const fetchProducts = async () => {
             try {
                 console.log("hellloooooooo");
-                const response = await fetch(`https://aronnok.vercel.app/api/auction/highestBidder/${auctionId}/${userId}`);
+                const response = await fetch(`http://localhost:8000/api/auction/highestBidder/${auctionId}/${userId}`);
                 const data = await response.json();
                 setProducts(data);
                 

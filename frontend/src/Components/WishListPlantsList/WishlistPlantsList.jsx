@@ -10,7 +10,7 @@
 //   useEffect(() => {
 //     const fetchWishlistPlants = async () => {
 //       try {
-//         const response = await axios.get(`https://aronnok.vercel.app/api/wishlist/${userId}`);
+//         const response = await axios.get(`http://localhost:8000/api/wishlist/${userId}`);
 //         setWishlistPlants(response.data);
 //       } catch (error) {
 //         console.error('Error fetching wishlist plants:', error);
@@ -50,7 +50,7 @@ const WishlistPlantsList = ({ userId }) => {
   useEffect(() => {
     const fetchWishlistPlants = async () => {
       try {
-        const response = await axios.get(`https://aronnok.vercel.app/api/wishlist/${userId}`);
+        const response = await axios.get(`http://localhost:8000/api/wishlist/${userId}`);
         setWishlistPlants(response.data);
         console.log('wishlistPlants:', wishlistPlants);
       } catch (error) {

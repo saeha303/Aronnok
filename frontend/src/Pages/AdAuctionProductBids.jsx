@@ -16,8 +16,8 @@ const AdAuctionProductBids = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://aronnok.vercel.app/api/auction/${auctionId}/${productId}`);
-        // const response = await axios.get('https://aronnok.vercel.app/api/auction/65bd415809608a5f34558cc7/65bd416e09608a5f34558ccb');
+        const response = await axios.get(`http://localhost:8000/api/auction/${auctionId}/${productId}`);
+        // const response = await axios.get('http://localhost:8000/api/auction/65bd415809608a5f34558cc7/65bd416e09608a5f34558ccb');
         setBids(response.data);
         console.log('Fetching updated data...');
       } catch (error) {

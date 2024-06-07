@@ -23,7 +23,7 @@ const ViewCart = (prod) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://aronnok.vercel.app/api/cart/viewCart/${userId}`);
+        const response = await fetch(`http://localhost:8000/api/cart/viewCart/${userId}`);
         const data = await response.json();
         setCart(data);
         setCartItems(data.items);
@@ -35,7 +35,7 @@ const ViewCart = (prod) => {
 
     const getPrice = async () => {
       try {
-        const response = await fetch(`https://aronnok.vercel.app/api/product/${prod.userId}/${prod.id}`);
+        const response = await fetch(`http://localhost:8000/api/product/${prod.userId}/${prod.id}`);
         const data = await response.json();
         return data.price;
       } catch (error) {
@@ -67,7 +67,7 @@ const ViewCart = (prod) => {
   const placeOrder = async () => {
     try {
       console.log(address);
-      const response=await axios.put(`https://aronnok.vercel.app/api/cart/buynow/${userId}`, {"address":address});
+      const response=await axios.put(`http://localhost:8000/api/cart/buynow/${userId}`, {"address":address});
       console.log("response")
       console.log(response.data.url);
       const textUrl=response.data.url;

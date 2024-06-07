@@ -15,7 +15,7 @@ const ViewSellRequestPage = () => {
     useEffect(() => {
         const fetchAuctionProducts = async () => {
             try {
-                const response = await axios.get(`https://aronnok.vercel.app/api/sellRequest/getAll`);
+                const response = await axios.get(`http://localhost:8000/api/sellRequest/getAll`);
               
 
                 // Ensure response.data.products is an array before setting the state

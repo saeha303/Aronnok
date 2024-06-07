@@ -15,7 +15,7 @@ const OneOrderDetailAdmin = ({ orderId }) => {
     const fetchOrderDetails = async () => {
       try {
 
-        const response = await axios.get(`https://aronnok.vercel.app/api/order/particularOrder/${orderId}`);
+        const response = await axios.get(`http://localhost:8000/api/order/particularOrder/${orderId}`);
 
 
         setOrderDetails(response.data);
@@ -31,7 +31,7 @@ const OneOrderDetailAdmin = ({ orderId }) => {
   const handleStatusChange = async () => {
     try {
       console.log('Order status update started');
-      await axios.put(`https://aronnok.vercel.app/api/order/${orderId}`, { status: newStatus });
+      await axios.put(`http://localhost:8000/api/order/${orderId}`, { status: newStatus });
       // Update the local state or fetch the order details again if needed
       console.log('Order status updated successfully', newStatus);
       window.location.reload();

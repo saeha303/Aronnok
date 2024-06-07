@@ -38,7 +38,7 @@
 
 //   const handleStartAuction = async () => {
 //     try {
-//       const response = await fetch('https://aronnok.vercel.app/api/auction/create', {
+//       const response = await fetch('http://localhost:8000/api/auction/create', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const Auction = () => {
 
   const handleStartAuction = async () => {
     try {
-      const response = await fetch('https://aronnok.vercel.app/api/auction/create', {
+      const response = await fetch('http://localhost:8000/api/auction/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

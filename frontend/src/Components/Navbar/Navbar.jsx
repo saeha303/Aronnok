@@ -31,7 +31,7 @@ const Navbar = ({ userId,menuPassed="default" }) => {
   //   setQuery(value);
 
   //   try {
-  //     const response = await fetch(`https://aronnok.vercel.app/api/search?query=${query}`);
+  //     const response = await fetch(`http://localhost:8000/api/search?query=${query}`);
   //     const data = await response.json();
   //     setSuggestions(data);
   //   } catch (error) {
@@ -42,7 +42,7 @@ const Navbar = ({ userId,menuPassed="default" }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://aronnok.vercel.app/api/cart/viewCart/${userId}`);
+        const response = await fetch(`http://localhost:8000/api/cart/viewCart/${userId}`);
         const data = await response.json();
         const totalQuantity = data.items.reduce((total, item) => total + item.quantity, 0);
         setQuantity(totalQuantity);
@@ -53,7 +53,7 @@ const Navbar = ({ userId,menuPassed="default" }) => {
 
     const fetchNotification = async () => {
       try {
-        const response = await fetch(`https://aronnok.vercel.app/api/notification/${userId}`);
+        const response = await fetch(`http://localhost:8000/api/notification/${userId}`);
         const data = await response.json();
         setNotis(data.messages);
       } catch (error) {

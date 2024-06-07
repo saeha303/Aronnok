@@ -21,7 +21,7 @@ import { useParams } from 'react-router-dom';
 //   useEffect(() => {
 //     const fetchProduct = async () => {
 //       try {
-//         const response = await axios.get(`https://aronnok.vercel.app/api/product/65a294c44865e9f4138c7281/${productId}`);
+//         const response = await axios.get(`http://localhost:8000/api/product/65a294c44865e9f4138c7281/${productId}`);
 //         console.log("id is ",productId);
 //         setProduct(response.data);
 //       } catch (error) {
@@ -108,7 +108,7 @@ const EditProduct = () => {
  useEffect(() => {
    const fetchProduct = async () => {
      try {
-       const response = await axios.get(`https://aronnok.vercel.app/api/product/65a294c44865e9f4138c7281/${productId}`);
+       const response = await axios.get(`http://localhost:8000/api/product/65a294c44865e9f4138c7281/${productId}`);
        setProduct(response.data);
        setEditedProduct({
          description: response.data.description,
@@ -142,7 +142,7 @@ const EditProduct = () => {
    if(window.confirm('Are you sure you want to delete this product?')){
    try {
    
-     await axios.delete(`https://aronnok.vercel.app/api/product/${productId}/65a294c44865e9f4138c7281`);
+     await axios.delete(`http://localhost:8000/api/product/${productId}/65a294c44865e9f4138c7281`);
      console.log('Product deleted successfully');
      window.location.href = '/admin/allproducts';
    } catch (error) { 
@@ -153,14 +153,14 @@ const EditProduct = () => {
 
  const handleSaveChanges = async () => {
    try {
-     await axios.put(`https://aronnok.vercel.app/api/product/${productId}/65a294c44865e9f4138c7281`, {
+     await axios.put(`http://localhost:8000/api/product/${productId}/65a294c44865e9f4138c7281`, {
        description: editedProduct.description,
        price: editedProduct.price,
        stock: editedProduct.stock,
      });
 
      // You may want to fetch the updated product data again after successful update
-     // const response = await axios.get(`https://aronnok.vercel.app/api/product/${userId}/${productId}`);
+     // const response = await axios.get(`http://localhost:8000/api/product/${userId}/${productId}`);
      // setProduct(response.data);
 
      // Toggle back to viewing mode

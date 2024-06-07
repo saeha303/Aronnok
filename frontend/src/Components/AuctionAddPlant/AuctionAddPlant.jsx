@@ -49,7 +49,7 @@ const AuctionAddPlant = ({ auctionId}) => {
       // for (const pair of formData.entries()) {
       //   console.log(pair[0], pair[1]);
       // }
-      await axios.post(`https://aronnok.vercel.app/api/auction/add-product/${auctionId}`, formData, {
+      await axios.post(`http://localhost:8000/api/auction/add-product/${auctionId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

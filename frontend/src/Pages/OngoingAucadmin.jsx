@@ -23,7 +23,7 @@ const OngoingAucAdmin = () => {
   useEffect(() => {
     const fetchTime = async ()=>{
       try {
-        const response = await fetch(`https://aronnok.vercel.app/api/auction/${auctionId}/remainingTime`);
+        const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/remainingTime`);
         const data = await response.json();
         setRtime(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
         console.log(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
@@ -39,7 +39,7 @@ const OngoingAucAdmin = () => {
   useEffect(() => {
     const fetchOrder = async () => {
         try {
-            const response = await fetch(`https://aronnok.vercel.app/api/auction/get-auction/${auctionId}`);
+            const response = await fetch(`http://localhost:8000/api/auction/get-auction/${auctionId}`);
             const data = await response.json();
             setAuction(data);
             setDate(data.date.substring(0, 10));
@@ -52,7 +52,7 @@ const OngoingAucAdmin = () => {
 
       const fetchProducts = async ()=>{
         try {
-          const response = await fetch(`https://aronnok.vercel.app/api/auction/${auctionId}/products`);
+          const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/products`);
           const data = await response.json();
           setProducts(data);
           console.log(products);
@@ -63,7 +63,7 @@ const OngoingAucAdmin = () => {
 
        const fetchTopProducts = async ()=>{
         try {
-          const response = await fetch(`https://aronnok.vercel.app/api/auction/${auctionId}/top`);
+          const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/top`);
           const data = await response.json();
           setTopProducts(data);
           console.log(products);

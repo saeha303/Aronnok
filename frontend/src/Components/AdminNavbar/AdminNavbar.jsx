@@ -17,7 +17,7 @@ const AdminNavbar = () => {
 
     const fetchNotification = async () => {
       try {
-        const response = await fetch(`https://aronnok.vercel.app/api/notification/65a294c44865e9f4138c7281`);
+        const response = await fetch(`http://localhost:8000/api/notification/65a294c44865e9f4138c7281`);
         const data = await response.json();
         setNotis(data.messages);
       } catch (error) {

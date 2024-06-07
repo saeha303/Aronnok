@@ -23,7 +23,7 @@ const CartContextProvider = (props) => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch('https://aronnok.vercel.app/api/products/659c027001b07da1b7fef185');
+          const response = await fetch('http://localhost:8000/api/products/659c027001b07da1b7fef185');
           const data = await response.json();
           setProducts(data);
         } catch (error) {

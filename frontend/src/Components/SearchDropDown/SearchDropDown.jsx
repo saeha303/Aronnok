@@ -11,7 +11,7 @@ const SearchDropDown = (prod) => {
     // useEffect(() => {
     //     const fetchUser = async () => {
     //         try {
-    //             const response = await fetch(`https://aronnok.vercel.app/api/user/${prod.userId}`);
+    //             const response = await fetch(`http://localhost:8000/api/user/${prod.userId}`);
     //             const data = await response.json();
     //             setUser(data);
     //         } catch (error) {
@@ -34,7 +34,7 @@ const SearchDropDown = (prod) => {
         setQuery(value);
     
         try {
-          const response = await axios.post(`https://aronnok.vercel.app/api/search`, { "query": value });
+          const response = await axios.post(`http://localhost:8000/api/search`, { "query": value });
           setSuggestions(response.data);
           //console.log(suggestions)
         } catch (error) {

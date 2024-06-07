@@ -22,7 +22,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchTime = async ()=>{
             try {
-              const response = await fetch(`https://aronnok.vercel.app/api/auction/remainingTime`);
+              const response = await fetch(`http://localhost:8000/api/auction/remainingTime`);
               const data = await response.json();
               setAucTime(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
               setAuctionId(data.auctionId)
@@ -36,7 +36,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`https://aronnok.vercel.app/api/products/get/bestSellers`);
+                const response = await fetch(`http://localhost:8000/api/products/get/bestSellers`);
                 const data = await response.json();
                 setProducts(data);
             } catch (error) {
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
 
           const fetchUsers = async () => {
             try {
-                const response = await fetch(`https://aronnok.vercel.app/api/getAllUser`);
+                const response = await fetch(`http://localhost:8000/api/getAllUser`);
                 const data = await response.json();
                 setUserNo(data.length);
             } catch (error) {
@@ -57,7 +57,7 @@ const AdminDashboard = () => {
         
           const fetchAllOrders = async () => {
             try {
-                const response = await fetch(`https://aronnok.vercel.app/api/order/activeOrders`);
+                const response = await fetch(`http://localhost:8000/api/order/activeOrders`);
                 const data = await response.json();
                 setOrders(data);
             } catch (error) {

@@ -17,7 +17,7 @@ const ProjectContextProvider = (props) => {
     // }
     const updateTotalQuantity= async (items)=>{
         try {
-            const response = await fetch('https://aronnok.vercel.app/api/cart/viewCart/659c027001b07da1b7fef185');
+            const response = await fetch('http://localhost:8000/api/cart/viewCart/659c027001b07da1b7fef185');
             const data = await response.json();
             setCart(data);
             setCartItems(data.items);

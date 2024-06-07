@@ -30,7 +30,7 @@ const Cover = ({userId}) => {
     useEffect(() => {
       const fetchTime = async ()=>{
         try {
-          const response = await fetch(`https://aronnok.vercel.app/api/auction/remainingTime`);
+          const response = await fetch(`http://localhost:8000/api/auction/remainingTime`);
           const data = await response.json();
           setTime(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
           console.log(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));

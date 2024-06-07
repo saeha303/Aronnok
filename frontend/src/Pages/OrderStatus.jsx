@@ -16,7 +16,7 @@ const OrderStatus = () => {
     // const fetchProduct = async (productId) => {
     //     try {
     //       // Assuming you have an API endpoint for fetching data based on productId
-    //       const response = await fetch(`https://aronnok.vercel.app/api/product/659c027001b07da1b7fef185/${productId}`);
+    //       const response = await fetch(`http://localhost:8000/api/product/659c027001b07da1b7fef185/${productId}`);
     //       const data = await response.json();
     //       return data;
     //     } catch (error) {
@@ -29,7 +29,7 @@ const OrderStatus = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const response = await fetch(`https://aronnok.vercel.app/api/order/particularOrder/${orderId}`);
+                const response = await fetch(`http://localhost:8000/api/order/particularOrder/${orderId}`);
                 const data = await response.json();
                 console.log(data)
                 setOrder(data);

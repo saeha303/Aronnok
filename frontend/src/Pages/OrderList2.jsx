@@ -36,7 +36,7 @@ const OrderList2 = () => {
        };
         const fetchOrders = async () => {
             try {
-                const response = await fetch(`https://aronnok.vercel.app/api/order/particularHistory/${userId}`);
+                const response = await fetch(`http://localhost:8000/api/order/particularHistory/${userId}`);
                 const data = await response.json();
                 setOrder(data);
                 divideOrders(data);

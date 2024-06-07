@@ -53,7 +53,7 @@ const ReviewAdd = ({pname,pdescription,pprice,pphoto,reqId}) => {
       console.log(formData)
       
     
-      await axios.post(`https://aronnok.vercel.app/api/requestApproval/65a294c44865e9f4138c7281/${reqId}`, formData, {
+      await axios.post(`http://localhost:8000/api/requestApproval/65a294c44865e9f4138c7281/${reqId}`, formData, {
       headers: {
       'Content-Type': 'multipart/form-data',
       },

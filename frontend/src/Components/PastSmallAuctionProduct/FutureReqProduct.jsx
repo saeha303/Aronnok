@@ -10,7 +10,7 @@ const FutureReqProduct = ({ productName, highestBid, userWhoBid, productPhoto ,d
 
 
     const handleaccept = async () => {
-        await axios.post(`https://aronnok.vercel.app/api/auction/auction-request-approval/${auctionId}/${reqId}`);
+        await axios.post(`http://localhost:8000/api/auction/auction-request-approval/${auctionId}/${reqId}`);
         console.log("Accepted");
     };
   

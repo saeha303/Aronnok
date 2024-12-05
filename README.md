@@ -8,9 +8,10 @@ This project is done as a part of Software Development Sessional. This is a full
 - **Secure Transactions:** Integrated payment system for safe and seamless transactions.
 - **Search & Filters:** Advanced search functionality allowing users to find plants by category, price, and other filters.
 - **Shopping Cart & Checkout:** Users can add plants to their cart, manage quantities, and proceed to checkout with integrated payment options.
+- **Bid on Rare Plants:** Participate in exciting auctions, stay updated on the latest bids for unique plant species.
 - **Wishlist:** Save your favorite plants for future purchases.
 - **Order History:** Buyers can view their purchase history and track order status.
-- **Admin Dashboard:** Admins can manage user accounts, product listings, and monitor transactions.
+- **Admin Dashboard:** Admins can manage user accounts, product listings, monitor transactions and bidding activity.
 
 ## 🛠️ Technologies Used
 **Frontend:** HTML, CSS, JavaScript, React.js, Bootstrap<br>

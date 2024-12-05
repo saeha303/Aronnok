@@ -2,6 +2,8 @@
 
 This project is done as a part of Software Development Sessional. This is a full-stack e-commerce platform to explore, buy, and sell rare hybrid plants in a secure and user-friendly environment.
 
+[Watch demo video](https://youtu.be/bMi_eooNuU8)
+
 ## 🚀 Features
 - **Browse & Buy:** Explore a diverse collection of rare hybrid plants. Sellers can add plants with detailed descriptions, prices, and images.
 - **Sell Your Plants:** List your own plants with images, descriptions, and prices.

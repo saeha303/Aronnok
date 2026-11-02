@@ -11,29 +11,24 @@ const {
   userAuctionInfoForAdmin
 
 } = require("../controller/user");
-const { isSignedIn, isAuthenticated } = require("../controller/auth");
+const { isSignedIn, isSelfOrAdmin, isAdmin } = require("../controller/auth");
+
 
 router.param("userId", getUserById);
 
-router.get("/user/:userId", 
-// isSignedIn, 
-// isAuthenticated, 
+router.get("/user/:userId", isSignedIn, isSelfOrAdmin, 
 getUser);
 
-router.get("/getAllUser", getAllUser);
+router.get("/getAllUser", isSignedIn, isAdmin, getAllUser);
 
-router.put("/user/:userId", 
-// isSignedIn, 
-// isAuthenticated, 
+router.put("/user/:userId", isSignedIn, isSelfOrAdmin, 
 updateUser);
 
 // router.get(
 //   "/orders/user/:userId",
-//   isSignedIn,
-//   isAuthenticated,
 //   userPurchaseList
 // );
-router.get("/userinfoforadmin/:userId", userInfoForAdmin);
-router.get("/userauctioninfoforadmin/:userId", userAuctionInfoForAdmin);
+router.get("/userinfoforadmin/:userId", isSignedIn, isAdmin, userInfoForAdmin);
+router.get("/userauctioninfoforadmin/:userId", isSignedIn, isSelfOrAdmin, userAuctionInfoForAdmin);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { sanitizeUserInput } = require("./auth");
 const { Auction, AuctionProduct, RequestedAuctionProduct } = require('../models/auction');
 
 
@@ -35,7 +36,7 @@ exports.updateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       { _id: req.profile._id },
-      { $set: req.body },
+      { $set: sanitizeUserInput(req.body) },
       { new: true, useFindAndModify: false }
     );
 
@@ -67,8 +68,6 @@ exports.getAllUser = (req, res, next) => {
       });
     }
     res.json(users);
-    // pass control to the next middleware or route handler in the sequence
-    next();
   })
   .catch((err) => {
     // Handle errors here

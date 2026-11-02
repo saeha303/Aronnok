@@ -1,7 +1,4 @@
 //works
-const { google } = require('googleapis');
-const apikeys = require('../aronnok-66e5b11f8e7a.json');
-const SCOPE = ['https://www.googleapis.com/auth/drive'];
 
 const Product = require("../models/product");
 const Category = require("../models/category");
@@ -10,72 +7,7 @@ const Cart = require('../models/cart');
 const Favourites = require('../models/favourites');
 const Order = require('../models/order');
 const {SellProduct,ComingSoonProduct}=require('../models/sell');
-const formidable = require("formidable");
-const _ = require("lodash");
-const fs = require("fs");
 const { check, validationResult } = require("express-validator");
-
-const Multer = require('multer');
-
-const multer = Multer({
-  storage: Multer.diskStorage({
-    destination: function (req, file, callback) {
-      let uploadDir = ''; // Initialize upload directory
-
-      // Check if req.body contains an upload directory
-      if (req.body.uploadDir) {
-        uploadDir = req.body.uploadDir;
-      } else {
-        // If no upload directory is specified, use a default directory
-        uploadDir = 'C:/Users/HP/Pictures/Saved Pictures';
-      }
-
-      // Set the destination path
-      callback(null, uploadDir);
-    },
-    filename: function (req, file, callback) {
-      callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
-    },
-  }),
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
-});
-
-const authenticateGoogle = () => {
-  const auth = new google.auth.GoogleAuth({
-    keyFile: `${__dirname}/aronnok-66e5b11f8e7a.json`,
-    scopes: "https://www.googleapis.com/auth/drive",
-  });
-  return auth;
-};
-
-const uploadToGoogleDrive = async (file, auth) => {
-  const fileMetadata = {
-    name: file.originalname,
-    parents: ["1pC3rLbP4Q1mrn8vCAAKvNX5Ck3Q0t6aj"], // Change it according to your desired parent folder id
-  };
-
-  const media = {
-    mimeType: file.mimetype,
-    body: fs.createReadStream(file.path),
-  };
-
-  const driveService = google.drive({ version: "v3", auth });
-
-  const response = await driveService.files.create({
-    requestBody: fileMetadata,
-    media: media,
-    fields: "id",
-  });
-  return response;
-};
-
-const deleteFile = (filePath) => {
-  fs.unlink(filePath, () => {
-    // console.log("file deleted");
-  });
-};
 
 exports.getProductById = (req, res, next, id) => {
   Product.findById(id)
@@ -118,22 +50,6 @@ exports.getcsProductById = (req, res, next, id) => {
         error: "Internal Server Error",
       });
     });
-};
-exports.imageHelper = multer.single("file"), async (req, res, next) => {
-  try {
-    // console.log("nope");
-    if (!req.file) {
-      res.status(400).send("No file uploaded.");
-      return;
-    }
-    // console.log("atleast");
-    const auth = authenticateGoogle();
-    const response = await uploadToGoogleDrive(req.file, auth);
-    // deleteFile(req.file.path);
-    res.status(200).json({ response });
-  } catch (err) {
-    console.log(err);
-  }
 };
 // create product
 exports.addPlant = async (req, res, next) => {

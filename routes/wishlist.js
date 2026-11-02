@@ -1,33 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const {
-    // getwishlistPlantsById,
     addWishlistPlant,
     getwishlistPlant,
     getAllwishlistPlants,
     removewishlistPlant,
 } = require("../controller/wishlist");
-const { isSignedIn, isAuthenticated, isAdmin } = require("../controller/auth");
-const { getUserById } = require("../controller/user");
-router.post(
-    "/wishlist/create/:userId",
-    // isSignedIn,
-    // isAuthenticated,
-    // isAdmin,
-    addWishlistPlant
-);
+const { isSignedIn, isSelfOrAdmin } = require("../controller/auth");
 
-router.get("/wishlist/:userId/:wishlistPlantId", getwishlistPlant);
-router.get("/wishlist/:userId", getAllwishlistPlants);
-
-//delete
-
-router.delete(
-    "/wishlist/:userId/:wishlistPlantId",
-    // isSignedIn,
-    // isAuthenticated,
-    // isAdmin,
-    removewishlistPlant
-);
+router.post("/wishlist/create/:userId", isSignedIn, isSelfOrAdmin, addWishlistPlant);
+router.get("/wishlist/:userId/:wishlistPlantId", isSignedIn, isSelfOrAdmin, getwishlistPlant);
+router.get("/wishlist/:userId", isSignedIn, isSelfOrAdmin, getAllwishlistPlants);
+router.delete("/wishlist/:userId/:wishlistPlantId", isSignedIn, isSelfOrAdmin, removewishlistPlant);
 
 module.exports = router;

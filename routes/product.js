@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const multer = require('multer');
-// Set up Multer to handle file uploads
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 const {
   getProductById,
   getcsProductById,
-  imageHelper,
   addPlant,
   getProduct,
   photo,
@@ -30,8 +24,9 @@ const {
   getComingSoonProduct,
   //   getAllUniqueCategories,
 } = require("../controller/product");
-const { isSignedIn, isAuthenticated, isAdmin } = require("../controller/auth");
+
 const { getUserById } = require("../controller/user");
+const { isSignedIn, isAdmin } = require("../controller/auth");
 
 //all of params
 router.param("userId", getUserById);
@@ -41,11 +36,8 @@ router.param("csProductId", getcsProductById);
 //all of actual routes
 // /admin/:userId/addPlant
 router.post(
-  "/product/create/:userId",
+  "/product/create/:userId", isSignedIn, isAdmin,
   // upload.single('photo'),
-  // isSignedIn,
-  // isAuthenticated,
-  // isAdmin,
   // imageHelper,
   addPlant
 );
@@ -57,19 +49,14 @@ router.get("/product/photo/:productId", photo);
 
 // delete route
 router.delete(
-  "/product/:productId/:userId",
-  // isSignedIn,
-  // isAuthenticated,
+  "/product/:productId/:userId", isSignedIn, isAdmin,
   isAdmin,
   deleteProduct
 );
 
 // update route
 router.put(
-  "/product/:productId/:userId",
-  // isSignedIn,
-  // isAuthenticated,
-  // isAdmin,
+  "/product/:productId/:userId", isSignedIn, isAdmin,
   updateProduct
 );
 
@@ -101,7 +88,7 @@ router.get('/category_stock',
 category_stock,
 );
 //user will give rating here
- router.post('/anyproduct/giverating/:productId', giveRating);
+ router.post('/anyproduct/giverating/:productId', isSignedIn, giveRating);
  router.get('/anyproduct/getrating/:productId', getRating);
 
 router.get("/products/get/bestSellers", getBestSellers);

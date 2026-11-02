@@ -1,8 +1,6 @@
 //works
 const Category = require("../models/category");
-const formidable = require("formidable");
 const { check, validationResult } = require("express-validator");
-const _ = require("lodash");
 const fs = require("fs");
 
 exports.getCategoryById = (req, res, next, id) => {

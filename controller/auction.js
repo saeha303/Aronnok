@@ -695,5 +695,23 @@ try {
 };
 
 
-// Schedule the function to run every minute
-setInterval(updateAuctionStatus, 10000);
+// Auction status (upcoming -> ongoing -> completed) is derived from the clock.
+// Serverless functions can't run background timers, so instead of a setInterval
+// we refresh lazily before auction requests, at most once every 10 seconds.
+const STATUS_REFRESH_MS = 10 * 1000;
+let lastStatusRefresh = 0;
+let pendingRefresh = null;
+exports.refreshAuctionStatus = async (req, res, next) => {
+  if (Date.now() - lastStatusRefresh > STATUS_REFRESH_MS) {
+    if (!pendingRefresh) {
+      pendingRefresh = updateAuctionStatus()
+        .catch((error) => console.error("Error updating auction status:", error))
+        .finally(() => {
+          lastStatusRefresh = Date.now();
+          pendingRefresh = null;
+        });
+    }
+    await pendingRefresh;
+  }
+  next();
+};

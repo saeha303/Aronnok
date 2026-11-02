@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Components/Navbar/Navbar'
-import '../Context/OrderList.css';
+import './OrderList.css';
 import CurrentOrderItem from '../Components/CurrentOrderItem/CurrentOrderItem';
 import { useParams } from 'react-router-dom';
 import Footer from '../Components/Footer/Footer';
+import { API } from '../backend';
 
 const OrderList2 = () => {
     const { userId } = useParams();
@@ -36,7 +37,7 @@ const OrderList2 = () => {
        };
         const fetchOrders = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/order/particularHistory/${userId}`);
+                const response = await fetch(`${API}/api/order/particularHistory/${userId}`);
                 const data = await response.json();
                 setOrder(data);
                 divideOrders(data);

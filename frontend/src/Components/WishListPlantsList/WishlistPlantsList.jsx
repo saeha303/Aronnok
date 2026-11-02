@@ -10,7 +10,7 @@
 //   useEffect(() => {
 //     const fetchWishlistPlants = async () => {
 //       try {
-//         const response = await axios.get(`http://localhost:8000/api/wishlist/${userId}`);
+//         const response = await axios.get(`${API}/api/wishlist/${userId}`);
 //         setWishlistPlants(response.data);
 //       } catch (error) {
 //         console.error('Error fetching wishlist plants:', error);
@@ -43,6 +43,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './WishlistPlantsList.css';
+import { API } from '../../backend';
 
 const WishlistPlantsList = ({ userId }) => {
   const [wishlistPlants, setWishlistPlants] = useState([]);
@@ -50,7 +51,7 @@ const WishlistPlantsList = ({ userId }) => {
   useEffect(() => {
     const fetchWishlistPlants = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/wishlist/${userId}`);
+        const response = await axios.get(`${API}/api/wishlist/${userId}`);
         setWishlistPlants(response.data);
         console.log('wishlistPlants:', wishlistPlants);
       } catch (error) {

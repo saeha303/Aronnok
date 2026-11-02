@@ -81,7 +81,7 @@ exports.getAllFavourites = async (req, res) => {
       user: userId,
     });
     if (!favourite) {
-      return res.status(404).json({ error: 'Product not found in favourites 1' });
+      return res.json({ user: userId, product: [] }); // nothing saved yet
     }
     const updatedProducts = await Promise.all(favourite.product.map(async (item) => {
       // console.log(item.product);

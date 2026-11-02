@@ -16,6 +16,7 @@ import Wishlist from '../Components/Wishlist/Wishlist';
 import Footer from '../Components/Footer/Footer';
 import Navbar from '../Components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
+import { API } from '../backend';
 
 const Home = () => {
   const { userId } = useParams();
@@ -23,7 +24,7 @@ const Home = () => {
   return (
    <div>
       <Navbar userId={userId} menu={"favourites"}/>
-      <Wishlist category="Favourites" mypath={`http://localhost:8000/api/favourites/${userId}`} userId={userId}/>
+      <Wishlist category="Favourites" mypath={`${API}/api/favourites/${userId}`} userId={userId}/>
       <Footer />
     </div>
   );

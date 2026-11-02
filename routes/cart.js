@@ -14,35 +14,29 @@ const { updateStock } = require("../controller/product");
 const {
     createOrder
 } = require("../controller/order");
-const { isSignedIn, isAuthenticated } = require("../controller/auth");
+
 const { paymentOrder } = require("../controller/payment");
+const { isSignedIn, isSelfOrAdmin } = require("../controller/auth");
 router.param("userId", getCartById);
-router.post('/cart/add/:userId/:productId',
-    // isSignedIn, 
+router.post('/cart/add/:userId/:productId', isSignedIn, isSelfOrAdmin,
     addToCart);
-router.get('/cart/viewCart/:userId',
-    // isSignedIn, 
+router.get('/cart/viewCart/:userId', isSignedIn, isSelfOrAdmin,
     viewCart);
-router.put('/cart/update/:userId/:productId',
-    // isSignedIn, 
+router.put('/cart/update/:userId/:productId', isSignedIn, isSelfOrAdmin,
     updateCartItem);
-router.delete('/cart/deleteItem/:userId/:productId',
-    // isSignedIn, 
+router.delete('/cart/deleteItem/:userId/:productId', isSignedIn, isSelfOrAdmin,
     deleteCartItem);
-router.delete('/cart/clear/:userId',
-    // isSignedIn, 
+router.delete('/cart/clear/:userId', isSignedIn, isSelfOrAdmin,
     removeCart
 );
-router.put('/cart/buynow/:userId',
-    // isSignedIn,
+router.put('/cart/buynow/:userId', isSignedIn, isSelfOrAdmin,
     
     buyNow,
     updateStock,
     createOrder,
     paymentOrder,
 );
-router.get('/cart/getQuantity/:userId/:productId',
-    // isSignedIn, 
+router.get('/cart/getQuantity/:userId/:productId', isSignedIn, isSelfOrAdmin,
     getQuantity);
 
 module.exports = router;

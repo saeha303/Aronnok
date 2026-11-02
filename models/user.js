@@ -1,6 +1,8 @@
 var mongoose = require("mongoose");
 const crypto = require("crypto");
-const { v1: uuidv1 } = require('uuid');
+const bcrypt = require("bcryptjs");
+
+const BCRYPT_ROUNDS = 10;
 
 var userSchema = new mongoose.Schema(
   {
@@ -70,29 +72,44 @@ userSchema
   .virtual("password")
   .set(function(password) {
     this._password = password;
-    this.salt = uuidv1();
-    this.encry_password = this.securePassword(password);
+    this.salt = undefined; // bcrypt stores its own salt inside the hash
+    this.encry_password = bcrypt.hashSync(password, BCRYPT_ROUNDS);
   })
   .get(function() {
     return this._password;
   });
 
 userSchema.methods = {
-  authenticate: function(plainpassword) {
-    return this.securePassword(plainpassword) === this.encry_password;
-  },
+  // Returns a Promise<boolean>. Accounts created before the switch to bcrypt
+  // still have an HMAC-SHA256 hash + salt; they are upgraded on next login.
+  authenticate: async function(plainpassword) {
+    if (!plainpassword || !this.encry_password) return false;
 
-  securePassword: function(plainpassword) {
-    if (!plainpassword) return "";
-    try {
-      return crypto
-        .createHmac("sha256", this.salt)
-        .update(plainpassword)
-        .digest("hex");
-    } catch (err) {
-      return "";
+    if (this.encry_password.startsWith("$2")) {
+      return bcrypt.compare(plainpassword, this.encry_password);
     }
+
+    const legacyHash = crypto
+      .createHmac("sha256", this.salt || "")
+      .update(plainpassword)
+      .digest("hex");
+    const matches = legacyHash.length === this.encry_password.length &&
+      crypto.timingSafeEqual(Buffer.from(legacyHash), Buffer.from(this.encry_password));
+    if (matches) {
+      this.password = plainpassword; // re-hash with bcrypt
+      await this.save();
+    }
+    return matches;
   }
 };
+
+// Never send password hashes to the client, wherever a user is serialised.
+userSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    delete ret.encry_password;
+    delete ret.salt;
+    return ret;
+  }
+});
 
 module.exports = mongoose.model("User", userSchema);

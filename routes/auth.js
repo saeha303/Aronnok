@@ -1,78 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const path = require('path');
-const cookieParser = require('cookie-parser');
-// const User = require('../models/user.js');
-const { check, validationResult,oneOf } = require("express-validator");
-const { signup,signin,signout } = require("../controller/auth");
-let staticPath = path.join(__dirname, '../public/client')
-const fileupload = require('express-fileupload')
-// Serve static files (including images) from the "public" directory
-// router.use(express.static('public'));
-router.use(express.static('assets')); // Add this line to serve images
-router.use(cookieParser());
+const { check, oneOf } = require("express-validator");
+const { signup, signin, signout } = require("../controller/auth");
 
-//middlewares
-router.use(express.static(staticPath))
-router.use(express.json())
-router.use(fileupload())
-// const bcrypt = require('bcrypt');
-router.post('/signup',
+router.post(
+    "/signup",
     [
-        check("username", "username should be at least 3 char").isLength({ min: 3 }),
-        check("email", "email is required").isEmail(),
-        check("password", "password should be at least 3 char").isLength({
-            min: 3,
-        }),
+        check("username", "Username should be at least 3 characters").isLength({ min: 3 }),
+        check("email", "A valid email is required").isEmail(),
+        check("password", "Password should be at least 6 characters").isLength({ min: 6 }),
     ],
-    signup);
-
-// Signin route
-//login route
-router.get('/signin', (req, res) => {
-    res.sendFile(path.join(staticPath, "log-in.html"));
-    // res.sendFile(path.join(__dirname, '../public/client', 'log-in.html'));
-})
+    signup
+);
 
 router.post(
     "/signin",
     [
-        // check("username","Username is required").exists(),
-        oneOf([
-            check("username","Username or email is required").exists(),
-            check("email").exists().isEmail(),
-        ], "Username or email is required"),
-        check("password", "password field is required").isLength({ min: 1 }),
+        oneOf(
+            [check("username").notEmpty(), check("email").isEmail()],
+            { message: "Username or email is required" }
+        ),
+        check("password", "Password is required").notEmpty(),
     ],
     signin
 );
 
-// signout route
 router.get("/signout", signout);
 
-// // Example of a protected route
-// router.get("/protected", isSignedIn, (req, res) => {
-//     res.json({
-//         message: "This is a protected route!",
-//         user: req.auth,
-//     });
-// });
-
-// // Example of an authenticated route
-// router.get("/authenticated", isSignedIn, isAuthenticated, (req, res) => {
-//     res.json({
-//         message: "This is an authenticated route!",
-//         user: req.profile,
-//     });
-// });
-
-// // Example of an admin route
-// router.get("/admin", isSignedIn, isAuthenticated, isAdmin, (req, res) => {
-//     res.json({
-//         message: "This is an admin route!",
-//         user: req.profile,
-//     });
-// });
-
 module.exports = router;
-

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './BidPopup.css';
 import axios from 'axios';
+import { API } from '../../backend';
 
 const BidPopup = ({ auctionId, productId, userId, currentBid, onClose, }) => {
   const [inputValue, setInputValue] = useState('');
@@ -18,7 +19,7 @@ const BidPopup = ({ auctionId, productId, userId, currentBid, onClose, }) => {
         console.log(userId);
         console.log(auctionId);
         console.log(productId);
-        await axios.post(`http://localhost:8000/api/auction/${auctionId}/products/${productId}/bid`, {"bidAmount":Number(inputValue) , "bidder": userId});
+        await axios.post(`${API}/api/auction/${auctionId}/products/${productId}/bid`, {"bidAmount":Number(inputValue) , "bidder": userId});
         setState(2);
       } catch (error) {
         console.error('Error bidding', error);

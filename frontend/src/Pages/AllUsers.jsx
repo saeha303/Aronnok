@@ -3,7 +3,8 @@ import AdminUserSmall from '../Components/AdminUserSmall/AdminUserSmall';
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar';
 import axios from 'axios';
 import Sidebar from '../Components/Sidebar/Sidebar';
-import '../Context/AllUsers.css'
+import './AllUsers.css'
+import { API } from '../backend';
 
 const AllUsers = () => {
     const [users, setUsers] = useState([]);
@@ -11,7 +12,7 @@ const AllUsers = () => {
     useEffect(() => {
         const fetchAuctionProducts = async () => {
           try {
-            const response = await axios.get(`http://localhost:8000/api/getAllUser`);
+            const response = await axios.get(`${API}/api/getAllUser`);
             setUsers(response.data);
           } catch (error) {
             console.error('Error fetching auction products:', error);

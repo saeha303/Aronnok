@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isSignedIn, isAuthenticated, isAdmin } = require("../controller/auth");
+
 const { getUserById } = require("../controller/user");
 // const { updateStock } = require("../controller/product");
 
@@ -22,6 +22,7 @@ const {
     getCartById,
     // buyNow,
 } = require('../controller/cart');
+const { isSignedIn, isSelfOrAdmin, isAdmin } = require("../controller/auth");
 // params, path e userId thaklei 2nd param er sathe associated hoye jabe
 router.param("userId", getCartById);
 router.param("orderId", getOrderById);
@@ -31,9 +32,7 @@ router.param("orderId", getOrderById);
 
 // create
 router.get(
-    "/order/particularOrder/:orderId",
-    //   isSignedIn,
-    //   isAuthenticated,
+    "/order/particularOrder/:orderId", isSignedIn,
     //   pushOrderInPurchaseList,
     getParticularOrder
 );
@@ -50,18 +49,12 @@ router.get(
 
 // for user to see all his active or previous orders
 router.get(
-    "/order/all",
-    //   isSignedIn,
-    //   isAuthenticated,
-    //   isAdmin,
+    "/order/all", isSignedIn, isAdmin,
     getAllOrders
 );
 
 router.get(
-    "/order/activeOrders",
-    //   isSignedIn,
-    //   isAuthenticated,
-    //   isAdmin,
+    "/order/activeOrders", isSignedIn, isAdmin,
     getActiveOrders
 );
 
@@ -77,25 +70,17 @@ router.get(
 
 //update order status from admin/user side, both can update using the same api, like a product has gone from processing to shipped
 router.put(
-    "/order/:orderId",
-    //   isSignedIn,
-    //   isAuthenticated,
-    //   isAdmin,
+    "/order/:orderId", isSignedIn, isAdmin,
     updateStatus
 );
 //get all the received orders for any user, admin perspective
 router.get(
-    "/order/history",
-    //   isSignedIn,
-    //   isAuthenticated,
-    //   isAdmin,
+    "/order/history", isSignedIn, isAdmin,
     getReceivedOrders
 );
 
 router.get(
-    "/order/particularHistory/:userId",
-    //   isSignedIn,
-    //   isAuthenticated,
+    "/order/particularHistory/:userId", isSignedIn, isSelfOrAdmin,
     getParticularUserHistory,
     
 );

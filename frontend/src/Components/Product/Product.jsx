@@ -7,6 +7,7 @@ import star_dull from '../Assets/star_dull_icon.png'
 import star from '../Assets/star_icon.png'
 import { CartContext } from '../../Context/CartContext'
 import axios from 'axios';
+import { API } from '../../backend';
 
 const Product = (prod) => {
   let flag = false;
@@ -19,7 +20,7 @@ const Product = (prod) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/favourites/${prod.userId}/isFavourite/${prod.id}`);
+        const response = await fetch(`${API}/api/favourites/${prod.userId}/isFavourite/${prod.id}`);
         const data = await response.json();
         setIsFav(data.flag);
       } catch (error) {
@@ -47,7 +48,7 @@ const Product = (prod) => {
       const addToFavourites = async() => {
         setIsClicked(!isClicked);
         try {
-          await axios.post(`http://localhost:8000/api/favourites/create/${prod.userId}`, { "plantId": prod.id });
+          await axios.post(`${API}/api/favourites/create/${prod.userId}`, { "plantId": prod.id });
         } catch (error) {
           console.error('Error adding', error);
         }

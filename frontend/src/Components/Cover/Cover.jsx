@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import Slider from 'react-slick';
+import SlickSlider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -13,6 +13,10 @@ import { useEffect } from 'react';
 import AuctionAddPlant from '../AuctionAddPlant/AuctionAddPlant';
 import SellRequestForm from '../SellRequestForm/SellRequestForm';
 import AuctionWinitem from '../AuctionWinitem/AuctionWinitem';
+import { API } from '../../backend';
+
+// react-slick is CommonJS; under Vite the default export can arrive wrapped.
+const Slider = SlickSlider.default ?? SlickSlider;
 
 const Cover = ({userId}) => {
 
@@ -30,7 +34,7 @@ const Cover = ({userId}) => {
     useEffect(() => {
       const fetchTime = async ()=>{
         try {
-          const response = await fetch(`http://localhost:8000/api/auction/remainingTime`);
+          const response = await fetch(`${API}/api/auction/remainingTime`);
           const data = await response.json();
           setTime(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
           console.log(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));

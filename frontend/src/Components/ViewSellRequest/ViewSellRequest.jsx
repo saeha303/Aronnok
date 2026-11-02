@@ -15,7 +15,7 @@
 //   const handleAccept = async () => {
 //     setFormVisible(true);
 //     console.log(reqId);
-//     //await axios.post(`http://localhost:8000/api/requestApproval/${reqId}`);
+//     //await axios.post(`${API}/api/requestApproval/${reqId}`);
 //     console.log("Accepted");
 //   };
 
@@ -70,6 +70,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReviewAdd from '../AdminNewProductAdd/ReviewAdd';
 import ReviewAddProductPage from '../../Pages/ReviewAddProductPage';
+import { API } from '../../backend';
 
 const ViewSellRequest = ({ productName, askingPrice, userWhoBid, productPhoto, description, reqId,userId, lifespan }) => {
   const [isFormVisible, setFormVisible] = useState(false);
@@ -85,7 +86,7 @@ const ViewSellRequest = ({ productName, askingPrice, userWhoBid, productPhoto, d
       pphoto: productPhoto,
       
     };
-     const response=await axios.post(`http://localhost:8000/api/sellRequest/${reqId}/payment`,requestData);
+     const response=await axios.post(`${API}/api/sellRequest/${reqId}/payment`,requestData);
     console.log("Accepted");
     window.location.href=response.data.url
     // Navigate to ReviewAddProductPage with parameters

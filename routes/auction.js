@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult, oneOf } = require("express-validator");
-const { isSignedIn, isAuthenticated, isAdmin } = require("../controller/auth");
+
 const {
   getAuctionById,
   createAuction,
@@ -24,6 +24,7 @@ const {
   getIndividualRequest,
   getProductsByHighestBidder,
   currentRemainingTime,
+  refreshAuctionStatus,
 } = require('../controller/auction');
 const {
   // getUserNotifications,
@@ -33,28 +34,24 @@ const {
 } = require('../controller/notification');
 const { getUserById } = require("../controller/user");
 const { paymentAuction } = require('../controller/payment');
+const { isSignedIn, isSelfOrAdmin, isAdmin } = require("../controller/auth");
+router.use(["/auction", "/auctions"], refreshAuctionStatus);
 router.param("userId", getUserById);
 router.param("auctionId", getAuctionById);
 // Define routes for auction functionalities
-router.post('/auction/create', 
-// isSignedIn,
-// isAuthenticated,
-// isAdmin,
+router.post('/auction/create', isSignedIn, isAdmin, 
 createAuction);
 router.get('/auction/get-auction/:auctionId', 
-// isSignedIn,
-// isAuthenticated,
-// isAdmin,
 getAuction);
 router.get('/auctions', getAllAuctions);
 router.get('/auction/:auctionId/products', getAuctionProducts);
-router.post('/auction/add-product/:auctionId', [
+router.post('/auction/add-product/:auctionId', isSignedIn, [
   check('name').not().isEmpty().withMessage('Product name is required'),
   check('description').not().isEmpty().withMessage('Product description is required'),
   // check('photo').not().isEmpty().withMessage('Product photo is required'),
 ], addProductToAuction);
-router.post('/auction/:auctionId/products/:productId/bid', placeBid);
-router.put('/auction/close-bidding/:auctionId/:productId', closeBidding,postUserNotifications);
+router.post('/auction/:auctionId/products/:productId/bid', isSignedIn, placeBid);
+router.put('/auction/close-bidding/:auctionId/:productId', isSignedIn, closeBidding,postUserNotifications);
 // Get past auctions
 router.get('/auction/past', getPastAuctions);
 
@@ -68,16 +65,15 @@ router.get('/auction/:auctionId/remainingTime', remainingTime);
 router.get('/auction/remainingTime', currentRemainingTime);
 
 ///IGNORE THIS, ETA LAGBE NA TODER
-router.post('/auction/:auctionId/:productId', addProductToAuctionById);
+router.post('/auction/:auctionId/:productId', isSignedIn, isAdmin, addProductToAuctionById);
 router.get('/auction/:auctionId/:productId', getIndividualProductInOneAuction);
-router.post('/auction/auction-request/:auctionId/:userId', sellRequest);
-router.post('/auction/auction-request-approval/:auctionId/:reqId', //userId just to check if it's admin
-// isSignedIn,
+router.post('/auction/auction-request/:auctionId/:userId', isSignedIn, isSelfOrAdmin, sellRequest);
+router.post('/auction/auction-request-approval/:auctionId/:reqId', isSignedIn, isAdmin,
 requestApproval);
 router.get('/auction/all/:auctionId/auction-request', getAllRequestsForIndividualAuction);
 router.get('/auction/all/:auctionId/:reqId/auction-ind-request', getIndividualRequest);
-router.post('/auction/:auctionId/:productId/payment', 
+router.post('/auction/:auctionId/:productId/payment', isSignedIn, 
 // closeBidding,
 paymentAuction);
-router.get('/auction/highestBidder/:auctionId/:userId', getProductsByHighestBidder);
+router.get('/auction/highestBidder/:auctionId/:userId', isSignedIn, isSelfOrAdmin, getProductsByHighestBidder);
 module.exports = router;

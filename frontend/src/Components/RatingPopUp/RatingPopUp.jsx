@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './RatingPopUp.css';
+import { API } from '../../backend';
 
 const RatingPopUp = ({ productId, closePopup }) => {
   const [selectedRating, setSelectedRating] = useState(0);
@@ -19,7 +20,7 @@ const RatingPopUp = ({ productId, closePopup }) => {
    
     try {
       // 1. Fetch old rating and ratedBy numbers
-      const response = await fetch(`http://localhost:8000/api/anyproduct/getrating/${productId}`);
+      const response = await fetch(`${API}/api/anyproduct/getrating/${productId}`);
       const oldRatingData = await response.json();
       const oldRating = oldRatingData.rating || 4;
       const ratedBy = oldRatingData.ratedBy || 1;
@@ -30,7 +31,7 @@ const RatingPopUp = ({ productId, closePopup }) => {
 
   
       // 3. Make a PUT or POST request to update the product's rating
-      const updateResponse = await fetch(`http://localhost:8000/api/anyproduct/giverating/${productId}`, {
+      const updateResponse = await fetch(`${API}/api/anyproduct/giverating/${productId}`, {
         method: 'POST', // or 'POST' depending on your API
         headers: {
           'Content-Type': 'application/json',

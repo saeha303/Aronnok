@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './WinnedProductList.css'; // Import your CSS file for styling
 import axios from 'axios';
+import { API } from '../../backend';
 
 const WinnedProductsList = ({userId}) => {
   const [winnedProducts, setWinnedProducts] = useState([]);
@@ -8,7 +9,7 @@ const WinnedProductsList = ({userId}) => {
   useEffect(() => {
     const fetchWinnedProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/userauctioninfoforadmin/${userId}`);
+        const response = await axios.get(`${API}/api/userauctioninfoforadmin/${userId}`);
         setWinnedProducts(response.data);
       } catch (error) {
         console.error('Error fetching won auction products:', error);

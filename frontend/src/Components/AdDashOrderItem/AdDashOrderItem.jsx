@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './AdDashOrderItem.css'
+import { API } from '../../backend';
 
 const AdDashOrderItem = (prod) => {
     const [user, setUser] = useState({});
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/user/${prod.userId}`);
+                const response = await fetch(`${API}/api/user/${prod.userId}`);
                 const data = await response.json();
                 setUser(data);
             } catch (error) {

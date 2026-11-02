@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../Components/Navbar/Navbar';
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar';
 import EditProduct from '../Components/EditProduct/EditProduct';
+import { getCurrentUserId } from '../session';
 
 
 
@@ -19,7 +20,7 @@ const EditProductPageAd = () => {
       <div>
         <AdminNavbar />
         {/* Pass the product ID to the OneProduct component */}
-        <EditProduct productId={productId} userId="65a294c44865e9f4138c7281"/>
+        <EditProduct productId={productId} userId={getCurrentUserId()}/>
         <Footer />
       </div>
     );

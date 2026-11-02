@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import AuctionSmall from '../Components/AuctionsSmall/AuctionSmall';
-import '../Context/AdminViewAuctionPage.css'
+import './AdminViewAuctionPage.css'
 import Navbar from '../Components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import PastAuctionSmall from '../Components/AuctionsSmall/PastAuctionSmall';
+import { API } from '../backend';
 
 const AdminViewAuctionPage = () => {
     const { userId } = useParams();
@@ -37,7 +38,7 @@ const AdminViewAuctionPage = () => {
         };
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/auctions`);
+        const response = await fetch(`${API}/api/auctions`);
         const data = await response.json();
         setAuctions(data);
         divideOrders(data);

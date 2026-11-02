@@ -7,6 +7,7 @@ import AuctionAddPlantClient from '../Components/AuctionAddPlant/AuctionAddPlant
 import '../Components/AdAuctionProductList/AdAuctionProductList.css';
 import Navbar from '../Components/Navbar/Navbar';
 import Footer from '../Components/Footer/Footer';
+import { API } from '../backend';
 
 const AuctionUpcoming = () => {
     const {userId,auctionId}=useParams();
@@ -16,7 +17,7 @@ const AuctionUpcoming = () => {
   useEffect(() => {
     const fetchAuctionProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/auction/${auctionId}/products`);
+        const response = await axios.get(`${API}/api/auction/${auctionId}/products`);
         setAuctionProducts(response.data);
         console.log(response.data);
       } catch (error) {

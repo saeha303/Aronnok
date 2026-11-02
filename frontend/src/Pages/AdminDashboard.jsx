@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import '../Context/AdminDashboard.css'
+import './AdminDashboard.css'
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import Footer from '../Components/Footer/Footer'
 import LineChart from '../Components/LineChart/LineChart';
 import { Link, useParams } from 'react-router-dom'
 import BestSellerItem from '../Components/BestSellerItem/BestSellerItem'
-import Calendar from '../Components/Calender/Calendar'
+import Calendar from '../Components/Calendar/Calendar'
 import AdDashOrderItem from '../Components/AdDashOrderItem/AdDashOrderItem'
 import PieChart from '../Components/PieChart/PieChart'
 import Histogram from '../Components/Histogram/Histogram'
+import { API } from '../backend';
 
 const AdminDashboard = () => {
     
@@ -22,7 +23,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchTime = async ()=>{
             try {
-              const response = await fetch(`http://localhost:8000/api/auction/remainingTime`);
+              const response = await fetch(`${API}/api/auction/remainingTime`);
               const data = await response.json();
               setAucTime(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
               setAuctionId(data.auctionId)
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/products/get/bestSellers`);
+                const response = await fetch(`${API}/api/products/get/bestSellers`);
                 const data = await response.json();
                 setProducts(data);
             } catch (error) {
@@ -46,7 +47,7 @@ const AdminDashboard = () => {
 
           const fetchUsers = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/getAllUser`);
+                const response = await fetch(`${API}/api/getAllUser`);
                 const data = await response.json();
                 setUserNo(data.length);
             } catch (error) {
@@ -57,7 +58,7 @@ const AdminDashboard = () => {
         
           const fetchAllOrders = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/order/activeOrders`);
+                const response = await fetch(`${API}/api/order/activeOrders`);
                 const data = await response.json();
                 setOrders(data);
             } catch (error) {
@@ -65,19 +66,24 @@ const AdminDashboard = () => {
             }
           };
 
-          const intervalId = setInterval(() => {
+          const refreshData = () => {
             fetchProduct();
             fetchUsers();
-            setAucTime((prevTime) =>{
-                if(prevTime>0) return prevTime-1;
-                else { return 0;}
-              });
             fetchAllOrders();
-            // checkTimeEnd();
+          };
+          refreshData();
+          // Data changes slowly; refresh every 30s instead of hitting the API every second.
+          const dataInterval = setInterval(refreshData, 30000);
+
+          // The auction countdown ticks locally.
+          const clockInterval = setInterval(() => {
+            setAucTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
           }, 1000);
-      
-          // Clear the interval when the component unmounts
-          return () => clearInterval(intervalId);
+
+          return () => {
+            clearInterval(dataInterval);
+            clearInterval(clockInterval);
+          };
        
       }, []);
 

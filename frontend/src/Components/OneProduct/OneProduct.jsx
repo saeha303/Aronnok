@@ -40,7 +40,7 @@ const OneProduct = ({ mypath, productId, userId, whattype }) => {
         let response = await axios.get(mypath);
         // console.log("in one product: "+response.data)
         // if(response.data.length===0)
-        // response = await axios.get(`http://localhost:8000/api/comingsoon/product/${userId}/${productId}`);
+        // response = await axios.get(`${API}/api/comingsoon/product/${userId}/${productId}`);
         setProduct(response.data);
 
 
@@ -72,7 +72,7 @@ const OneProduct = ({ mypath, productId, userId, whattype }) => {
 
   const addToCart = async () => {
     try {
-      await axios.post(`http://localhost:8000/api/cart/add/${userId}/${productId}`, {});
+      await axios.post(`${API}/api/cart/add/${userId}/${productId}`, {});
     } catch (error) {
       console.error('Error adding', error);
     }
@@ -80,7 +80,7 @@ const OneProduct = ({ mypath, productId, userId, whattype }) => {
   };
   const addToFavourites = async () => {
     try {
-      await axios.post(`http://localhost:8000/api/favourites/create/${userId}`, { "plantId": productId });
+      await axios.post(`${API}/api/favourites/create/${userId}`, { "plantId": productId });
     } catch (error) {
       console.error('Error adding', error);
     }
@@ -88,7 +88,7 @@ const OneProduct = ({ mypath, productId, userId, whattype }) => {
   };
   const addToWishlist = async () => {
     try {
-      await axios.post(`http://localhost:8000/api/wishlist/create/${userId}`, { "plantId": productId });
+      await axios.post(`${API}/api/wishlist/create/${userId}`, { "plantId": productId });
     } catch (error) {
       console.error('Error adding', error);
     }

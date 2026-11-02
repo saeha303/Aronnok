@@ -1,29 +1,55 @@
-// const axios = require('axios');
 const User = require("../models/user");
 const { Auction, AuctionProduct, RequestedAuctionProduct } = require('../models/auction');
 const { SellProduct } = require('../models/sell');
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema;
 const SSLCommerzPayment = require('sslcommerz-lts');
-const product = require('../models/product');
-const store_id = 'aronn65c4e1445f6f7'
-const store_passwd = 'aronn65c4e1445f6f7@ssl'
-const is_live = false //true for live, false for sandbox
-const tran_id = new ObjectId().toString();
+
+// SSLCommerz credentials come from the environment (see .env.example).
+const store_id = process.env.SSLCOMMERZ_STORE_ID;
+const store_passwd = process.env.SSLCOMMERZ_STORE_PASSWORD;
+const is_live = process.env.SSLCOMMERZ_IS_LIVE === 'true'; // false = sandbox
+
+// Public URL of the deployed app. Frontend and API share one origin on Vercel,
+// so the API lives under `${APP_URL}/api` and pages under `${APP_URL}/...`.
+const APP_URL = (process.env.APP_URL || 'http://localhost:5173').replace(/\/$/, '');
+
+// Every payment needs its own transaction id.
+const newTransactionId = () => new mongoose.Types.ObjectId().toString();
+
+const gatewayUrls = (tran_id, successPath = `/api/payment/success/${tran_id}`) => ({
+  tran_id,
+  success_url: `${APP_URL}${successPath}`,
+  fail_url: `${APP_URL}/api/payment/fail/${tran_id}`,
+  cancel_url: `${APP_URL}/api/payment/fail/${tran_id}`,
+  ipn_url: `${APP_URL}/api/payment/ipn`,
+});
+
+const startPayment = (data, res) => {
+  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+  return sslcz.init(data)
+    .then(apiResponse => {
+      if (!apiResponse.GatewayPageURL) {
+        console.error('SSLCommerz init failed:', apiResponse.failedreason || apiResponse);
+        return res.status(502).json({ error: 'Could not start payment' });
+      }
+      res.status(200).json({ url: apiResponse.GatewayPageURL });
+    })
+    .catch(err => {
+      console.error('SSLCommerz init error:', err);
+      res.status(502).json({ error: 'Could not start payment' });
+    });
+};
 exports.paymentOrder = async (req, res) => {
   const order = req.order;
   const user = await User.findById(order.user);
+  const tran_id = newTransactionId();
   const data = {
     total_amount: order.amount,
     currency: 'BDT',
-    tran_id: tran_id, // use unique tran_id for each api call
-    success_url: `http://localhost:8000/api/payment/success/${tran_id}`,
-    fail_url: `http://localhost:8000/api/payment/fail/${tran_id}`,
-    cancel_url: 'http://localhost:8000/cancel',
-    ipn_url: 'http://localhost:8000/ipn',
+    ...gatewayUrls(tran_id, `/api/payment/success/${tran_id}?userId=${user._id}`),
     shipping_method: 'Courier',
-    product_name: 'Computer.',
-    product_category: 'Electronic',
+    product_name: 'Plants',
+    product_category: 'Plants',
     product_profile: 'general',
     cus_name: user.username,
     cus_email: user.email,
@@ -43,34 +69,19 @@ exports.paymentOrder = async (req, res) => {
     ship_postcode: 1000,
     ship_country: 'Bangladesh',
   };
-  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-  sslcz.init(data).then(apiResponse => {
-    // Redirect the user to payment gateway
-    let GatewayPageURL = apiResponse.GatewayPageURL
-    // console.log(GatewayPageURL)
-    // res.redirect(GatewayPageURL)
-    res.status(200).json({ "url": GatewayPageURL })
-    // console.log('Redirecting to: ', GatewayPageURL)
-  });
+  return startPayment(data, res);
 };
 
 exports.success = async (req, res) => {
-
-  // res.status(200).json({"message": `${req.params.transId} is successful`});
-  // console.log(`${req.params.transId} is successful`);
-  res.redirect(`http://localhost:3000/home/659ef1753bec420af571c082`);
+  const { userId } = req.query;
+  res.redirect(userId ? `${APP_URL}/home/${encodeURIComponent(userId)}` : `${APP_URL}/payment/success/${req.params.transId}`);
 };
 exports.successSell = async (req, res) => {
   const { pname, pdescription, pprice, pphoto,reqId } = req.query;
-  // console.log(reqId);
-  // res.status(200).json({"message": `${req.params.transId} is successful`});
-  // console.log(`${req.params.transId} is successful`);
-  res.redirect(`http://localhost:3000/admin/viewsellrequests/review?pname=${encodeURIComponent(pname)}&pdescription=${encodeURIComponent(pdescription)}&pprice=${encodeURIComponent(pprice)}&pphoto=${encodeURIComponent(pphoto)}&reqId=${encodeURIComponent(reqId)}`);
+  res.redirect(`${APP_URL}/admin/viewsellrequests/review?pname=${encodeURIComponent(pname)}&pdescription=${encodeURIComponent(pdescription)}&pprice=${encodeURIComponent(pprice)}&pphoto=${encodeURIComponent(pphoto)}&reqId=${encodeURIComponent(reqId)}`);
 };
 exports.fail = async (req, res) => {
-  // res.status(400).json({"message": `${req.params.transId} has failed`});
-  // console.log(`${req.params.transId} has failed`)
-  res.redirect(`http://localhost:3000/payment/fail/${req.params.transId}`);
+  res.redirect(`${APP_URL}/payment/fail/${req.params.transId}`);
 };
 
 exports.paymentAuction = async (req, res) => {
@@ -79,17 +90,14 @@ exports.paymentAuction = async (req, res) => {
   // console.log(auctionProduct);
   const bidderId = auctionProduct.highestBidder;
   const bidder = await User.findById(bidderId);
+  const tran_id = newTransactionId();
   const data = {
     total_amount: auctionProduct.currentBid,
     currency: 'BDT',
-    tran_id: tran_id, // use unique tran_id for each api call
-    success_url: `http://localhost:8000/api/payment/success/${tran_id}`,
-    fail_url: `http://localhost:8000/api/payment/fail/${tran_id}`,
-    cancel_url: 'http://localhost:8000/cancel',
-    ipn_url: 'http://localhost:8000/ipn',
+    ...gatewayUrls(tran_id, `/api/payment/success/${tran_id}?userId=${bidder._id}`),
     shipping_method: 'Courier',
-    product_name: 'Computer.',
-    product_category: 'Electronic',
+    product_name: 'Plants',
+    product_category: 'Plants',
     product_profile: 'general',
     cus_name: bidder.username,
     cus_email: bidder.email,
@@ -109,35 +117,29 @@ exports.paymentAuction = async (req, res) => {
     ship_postcode: 1000,
     ship_country: 'Bangladesh',
   };
-  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-  sslcz.init(data).then(apiResponse => {
-    // Redirect the user to payment gateway
-    let GatewayPageURL = apiResponse.GatewayPageURL
-    // console.log(GatewayPageURL)
-    // res.redirect(GatewayPageURL)
-    res.status(200).json({ "url": GatewayPageURL })
-    // console.log('Redirecting to: ', GatewayPageURL)
-  });
+  return startPayment(data, res);
 };
 
-exports.paymentSell = async (req, res,next) => {
-  // console.log("kjbkaj")
-  // console.log(req.body.pname);
+exports.paymentSell = async (req, res) => {
   const sellProductId = req.params.reqProductId;
   const sellProduct = await SellProduct.findById(sellProductId);
   const userId = sellProduct.user;
   const user = await User.findById(userId);
+  const tran_id = newTransactionId();
+  const sellQuery = new URLSearchParams({
+    pname: req.body.pname ?? '',
+    pdescription: req.body.pdescription ?? '',
+    pprice: req.body.pprice ?? '',
+    pphoto: req.body.pphoto ?? '',
+    reqId: req.params.reqProductId,
+  });
   const data = {
     total_amount: sellProduct.askingPrice,
     currency: 'BDT',
-    tran_id: tran_id, // use unique tran_id for each api call
-    success_url: `http://localhost:8000/api/payment/success/sell/${tran_id}?pname=${req.body.pname}&pdescription=${req.body.pdescription}&pprice=${req.body.pprice}&pphoto=${req.body.pphoto}&reqId=${req.params.reqProductId}`,
-    fail_url: `http://localhost:8000/api/payment/fail/${tran_id}`,
-    cancel_url: 'http://localhost:8000/cancel',
-    ipn_url: 'http://localhost:8000/ipn',
+    ...gatewayUrls(tran_id, `/api/payment/success/sell/${tran_id}?${sellQuery}`),
     shipping_method: 'Courier',
-    product_name: 'Computer.',
-    product_category: 'Electronic',
+    product_name: 'Plants',
+    product_category: 'Plants',
     product_profile: 'general',
     cus_name: user.username,
     cus_email: user.email,
@@ -157,14 +159,5 @@ exports.paymentSell = async (req, res,next) => {
     ship_postcode: 1000,
     ship_country: 'Bangladesh',
   };
-  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-  sslcz.init(data).then(apiResponse => {
-    // Redirect the user to payment gateway
-    let GatewayPageURL = apiResponse.GatewayPageURL
-    // console.log(GatewayPageURL)
-    // res.redirect(GatewayPageURL)
-    res.status(200).json({ "url": GatewayPageURL })
-    next();
-    // console.log('Redirecting to: ', GatewayPageURL)
-  });
+  return startPayment(data, res);
 };

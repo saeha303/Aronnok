@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './frp.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { API } from '../../backend';
 
 const FutureReqProduct = ({ productName, highestBid, userWhoBid, productPhoto ,description,reqId}) => {
 
@@ -10,7 +11,7 @@ const FutureReqProduct = ({ productName, highestBid, userWhoBid, productPhoto ,d
 
 
     const handleaccept = async () => {
-        await axios.post(`http://localhost:8000/api/auction/auction-request-approval/${auctionId}/${reqId}`);
+        await axios.post(`${API}/api/auction/auction-request-approval/${auctionId}/${reqId}`);
         console.log("Accepted");
     };
   

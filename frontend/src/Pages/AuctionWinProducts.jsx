@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar';
 import Footer from '../Components/Footer/Footer';
 import AuctionWinitem from '../Components/AuctionWinitem/AuctionWinitem';
-import '../Context/AuctionWinProducts.css'
+import './AuctionWinProducts.css'
+import { API } from '../backend';
 
 
 const AuctionWinProducts = () => {
@@ -14,7 +15,7 @@ const AuctionWinProducts = () => {
         const fetchProducts = async () => {
             try {
                 console.log("hellloooooooo");
-                const response = await fetch(`http://localhost:8000/api/auction/highestBidder/${auctionId}/${userId}`);
+                const response = await fetch(`${API}/api/auction/highestBidder/${auctionId}/${userId}`);
                 const data = await response.json();
                 setProducts(data);
                 

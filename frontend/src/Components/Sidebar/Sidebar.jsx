@@ -1,11 +1,18 @@
 // Sidebar.jsx
 
 import React from 'react';
-import { Link,useLocation  } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { signOut } from '../../session';
 import './Sidebar.css';
 
 const Sidebar = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const handleLogout = async (e) => {
+      e.preventDefault();
+      await signOut().catch(() => {});
+      navigate('/login', { replace: true });
+    };
   return (
     <div className="sidebar">
       
@@ -37,7 +44,7 @@ const Sidebar = () => {
         </li>
 
         <li className='eta7'>
-          <Link to="/"> <i class="bi bi-box-arrow-left" style={{padding:'10px'}}></i>LogOut</Link>
+          <Link to="/login" onClick={handleLogout}> <i className="bi bi-box-arrow-left" style={{padding:'10px'}}></i>LogOut</Link>
         </li>
       </ul>
     </div>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import "./OrderItem.css"
 import RatingPopUp from '../RatingPopUp/RatingPopUp';
+import { API } from '../../backend';
+import { getCurrentUserId } from '../../session';
 const OrderItem = (prod) => {
 
     const [product, setProduct] = useState([]);
@@ -9,7 +11,7 @@ const OrderItem = (prod) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/product/659c027001b07da1b7fef185/${prod.id}`);
+                const response = await fetch(`${API}/api/product/${getCurrentUserId()}/${prod.id}`);
                 const data = await response.json();
                 setProduct(data);
             } catch (error) {
@@ -22,7 +24,7 @@ const OrderItem = (prod) => {
      
         const giveRating = async () => {
             // try {
-            //     const response = await fetch(`http://localhost:8000/api/product/rating/${prod.id}`, {
+            //     const response = await fetch(`${API}/api/product/rating/${prod.id}`, {
             //         method: 'PUT',
             //         headers: {
             //             'Content-Type': 'application/json',

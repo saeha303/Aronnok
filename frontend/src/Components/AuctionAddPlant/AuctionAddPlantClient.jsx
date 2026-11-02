@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import './AuctionAddPlant.css';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { API } from '../../backend';
 
 const AuctionAddPlantClient = ({ auctionId}) => {
     const {userId}=useParams();
@@ -52,7 +53,7 @@ const AuctionAddPlantClient = ({ auctionId}) => {
       //   console.log(pair[0], pair[1]);
       // }
       //'/auction/auction-request/:auctionId/:userId'
-      await axios.post(`http://localhost:8000/api/auction/auction-request/${auctionId}/${userId}`, formData, {
+      await axios.post(`${API}/api/auction/auction-request/${auctionId}/${userId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

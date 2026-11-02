@@ -22,6 +22,7 @@ import OneProduct from '../Components/OneProduct/OneProduct';
 import Footer from '../Components/Footer/Footer';
 import { useParams } from 'react-router-dom';
 import Navbar from '../Components/Navbar/Navbar';
+import { API } from '../backend';
 
 
 
@@ -35,9 +36,9 @@ const ViewProduct = () => {
     console.log("category in view product")
     let path=''
     if (category === 'comingsoon') {
-      path=`http://localhost:8000/api/comingsoon/${userId}/${productId}`;
+      path=`${API}/api/comingsoon/${userId}/${productId}`;
   } else {
-      path=`http://localhost:8000/api/product/${userId}/${productId}`;
+      path=`${API}/api/product/${userId}/${productId}`;
   }
   console.log(path);
   

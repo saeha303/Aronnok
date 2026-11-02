@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../Context/AdAuctionProductBids.css';
+import './AdAuctionProductBids.css';
 import { useParams } from 'react-router-dom';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar';
+import { API } from '../backend';
 
 const AdAuctionProductBids = () => {
   const [bids, setBids] = useState([]);
@@ -16,8 +17,8 @@ const AdAuctionProductBids = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/auction/${auctionId}/${productId}`);
-        // const response = await axios.get('http://localhost:8000/api/auction/65bd415809608a5f34558cc7/65bd416e09608a5f34558ccb');
+        const response = await axios.get(`${API}/api/auction/${auctionId}/${productId}`);
+        // const response = await axios.get(`${API}/api/auction/65bd415809608a5f34558cc7/65bd416e09608a5f34558ccb`);
         setBids(response.data);
         console.log('Fetching updated data...');
       } catch (error) {

@@ -10,7 +10,7 @@
 //     const fetchProduct = async (productId) => {
 //         try {
 //           // Assuming you have an API endpoint for fetching product data based on productId
-//           const response = await fetch(`http://localhost:8000/api/product/${prod.userId}/${productId}`);
+//           const response = await fetch(`${API}/api/product/${prod.userId}/${productId}`);
 //           const data = await response.json();
 //           return data;
 //         } catch (error) {
@@ -32,7 +32,7 @@
 
 //         const fetchOrder = async () => {
 //             try {
-//                 const response = await fetch(`http://localhost:8000/api/order/particularOrder/${prod.id}`);
+//                 const response = await fetch(`${API}/api/order/particularOrder/${prod.id}`);
 //                 const data = await response.json();
 //                 setOrder(data);
 //                 setOrderItems(data.products);
@@ -71,6 +71,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './CurrentOrderItem.css';
+import { API } from '../../backend';
 
 const CurrentOrderItem = (prod) => {
   const [order, setOrder] = useState({});
@@ -79,7 +80,7 @@ const CurrentOrderItem = (prod) => {
   const fetchProduct = async (productId) => {
     try {
       // Assuming you have an API endpoint for fetching product data based on productId
-      const response = await fetch(`http://localhost:8000/api/product/${prod.userId}/${productId}`);
+      const response = await fetch(`${API}/api/product/${prod.userId}/${productId}`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -99,7 +100,7 @@ const CurrentOrderItem = (prod) => {
 
     const fetchOrder = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/order/particularOrder/${prod.id}`);
+        const response = await fetch(`${API}/api/order/particularOrder/${prod.id}`);
         const data = await response.json();
         setOrder(data);
         getNames(data.products);

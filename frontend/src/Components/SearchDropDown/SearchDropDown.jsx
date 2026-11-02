@@ -2,6 +2,7 @@ import axios from 'axios';
 import './SearchDropDown.css'
 import React, { useState } from 'react'
 import SearchItem from '../SearchItem/SearchItem';
+import { API } from '../../backend';
 
 const SearchDropDown = (prod) => {
     const [query, setQuery] = useState('');
@@ -11,7 +12,7 @@ const SearchDropDown = (prod) => {
     // useEffect(() => {
     //     const fetchUser = async () => {
     //         try {
-    //             const response = await fetch(`http://localhost:8000/api/user/${prod.userId}`);
+    //             const response = await fetch(`${API}/api/user/${prod.userId}`);
     //             const data = await response.json();
     //             setUser(data);
     //         } catch (error) {
@@ -34,7 +35,7 @@ const SearchDropDown = (prod) => {
         setQuery(value);
     
         try {
-          const response = await axios.post(`http://localhost:8000/api/search`, { "query": value });
+          const response = await axios.post(`${API}/api/search`, { "query": value });
           setSuggestions(response.data);
           //console.log(suggestions)
         } catch (error) {

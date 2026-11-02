@@ -2,13 +2,21 @@ import React, { useContext, useEffect, useState } from 'react'
 import './Navbar.css'
 import logo from '../Assets/aronnok-logo.png'
 import cart_icon from '../Assets/cart-icon.jpg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { signOut } from '../../session';
 import { CartContext } from '../../Context/CartContext'
 import axios from 'axios';
 import UserNotification from '../UserNotification/UserNotification'
 import SearchDropDown from '../SearchDropDown/SearchDropDown'
+import { API } from '../../backend';
 
 const Navbar = ({ userId,menuPassed="default" }) => {
+  const navigate = useNavigate();
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await signOut().catch(() => {});
+    navigate('/login', { replace: true });
+  };
   const [menu, setMenu] = useState(menuPassed);
   const [cartTotalQuantity, setQuantity] = useState(0);
   const [notis, setNotis] = useState([]);
@@ -31,7 +39,7 @@ const Navbar = ({ userId,menuPassed="default" }) => {
   //   setQuery(value);
 
   //   try {
-  //     const response = await fetch(`http://localhost:8000/api/search?query=${query}`);
+  //     const response = await fetch(`${API}/api/search?query=${query}`);
   //     const data = await response.json();
   //     setSuggestions(data);
   //   } catch (error) {
@@ -42,7 +50,7 @@ const Navbar = ({ userId,menuPassed="default" }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/cart/viewCart/${userId}`);
+        const response = await fetch(`${API}/api/cart/viewCart/${userId}`);
         const data = await response.json();
         const totalQuantity = data.items.reduce((total, item) => total + item.quantity, 0);
         setQuantity(totalQuantity);
@@ -53,7 +61,7 @@ const Navbar = ({ userId,menuPassed="default" }) => {
 
     const fetchNotification = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/notification/${userId}`);
+        const response = await fetch(`${API}/api/notification/${userId}`);
         const data = await response.json();
         setNotis(data.messages);
       } catch (error) {
@@ -119,7 +127,7 @@ const Navbar = ({ userId,menuPassed="default" }) => {
             {isUserExpanded && (
               <div className="navbar-user-expanded">
                 <Link to={`/profile/${userId}`} style={{ textDecoration: 'none' }}><p style={{ marginLeft:"10px"}}>Profile</p></Link>
-                <Link to={`/`} style={{ textDecoration: 'none' }}><p style={{ marginLeft:"10px"}}>Log out</p></Link>
+                <Link to="/login" onClick={handleLogout} style={{ textDecoration: 'none' }}><p style={{ marginLeft:"10px"}}>Log out</p></Link>
               </div>
             )}
         </div>

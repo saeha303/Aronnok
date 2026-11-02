@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import NotificationComp from '../NotificationComp/NotificationComp';
 import './UserNotification.css'
+import { API } from '../../backend';
 
 const UserNotification = ({ userId, onClose }) => {
 
@@ -10,7 +11,7 @@ const UserNotification = ({ userId, onClose }) => {
   useEffect(() => {
     const fetchNotification = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/notification/${userId}`);
+        const response = await fetch(`${API}/api/notification/${userId}`);
         const data = await response.json();
         setNotis(data.messages);
         console.log(data.messages);

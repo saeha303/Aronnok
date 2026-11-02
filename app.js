@@ -45,20 +45,19 @@ app.use((req, res, next) => {
 // ---------------------------------------------------------------------------
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-[
-  "auth",
-  "user",
-  "product",
-  "category",
-  "payment",
-  "favourites",
-  "wishlist",
-  "cart",
-  "order",
-  "auction",
-  "notification",
-  "sell",
-].forEach((name) => app.use("/api", require(`./routes/${name}`)));
+// Static requires (not a loop) so Vercel's bundler can trace every route file.
+app.use("/api", require("./routes/auth"));
+app.use("/api", require("./routes/user"));
+app.use("/api", require("./routes/product"));
+app.use("/api", require("./routes/category"));
+app.use("/api", require("./routes/payment"));
+app.use("/api", require("./routes/favourites"));
+app.use("/api", require("./routes/wishlist"));
+app.use("/api", require("./routes/cart"));
+app.use("/api", require("./routes/order"));
+app.use("/api", require("./routes/auction"));
+app.use("/api", require("./routes/notification"));
+app.use("/api", require("./routes/sell"));
 
 app.use("/api", (req, res) => res.status(404).json({ error: "Not found" }));
 

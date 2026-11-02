@@ -86,7 +86,7 @@ exports.getAllwishlistPlants = async (req, res) => {
       user: userId,
     });
     if (!wishlistPlant) {
-      return res.status(404).json({ error: 'Product not found in wishlist 1' });
+      return res.json([]); // nothing saved yet
     }
     const updatedProducts = await Promise.all(wishlistPlant.product.map(async (item) => {
       // console.log(item.product);

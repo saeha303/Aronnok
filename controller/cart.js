@@ -77,6 +77,10 @@ exports.viewCart = async (req, res) => {
         // ...
 
         const cart = req.cart;
+        if (!cart) {
+            // New users have no cart document yet
+            return res.json({ user: req.params.userId, items: [] });
+        }
 
         const updatedProducts = await Promise.all(cart.items.map(async (item) => {
             const productDetails = await Product.findById(item.product);

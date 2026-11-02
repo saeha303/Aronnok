@@ -79,13 +79,19 @@ async function seed() {
     { name: "Spring Bloom Auction", date: new Date(now - 10 * DAY), startTime: new Date(now - 10 * DAY), endTime: new Date(now - 8 * DAY), status: "completed" },
   ]);
 
-  await AuctionProduct.insertMany([
+  const auctionProducts = await AuctionProduct.insertMany([
     { name: "Corpse Lily Specimen", description: "Preserved Rafflesia bloom, certified and framed.", photo: "/redsleeve.jpg", currentBid: 12000, auction: ongoing._id, bids: [{ bidder: demo._id, bidAmount: 12000 }], highestBidder: demo._id },
     { name: "Variegated Pink Princess", description: "Mature plant with over 50% pink variegation.", photo: "/sky.jpg", currentBid: 4500, auction: ongoing._id },
     { name: "Wild Ixora Bonsai", description: "Hand-trained ixora bonsai, 12 years old.", photo: "/ruby.jpg", currentBid: 7000, auction: ongoing._id },
     { name: "Purple Passion Duo", description: "Two mature passionflower vines.", photo: "/moonlovers.jpg", currentBid: 1500, auction: upcoming._id },
     { name: "Ancient Juniper", description: "20-year-old juniper bonsai.", photo: "/bansai.jpg", currentBid: 18000, auction: completed._id, bids: [{ bidder: demo._id, bidAmount: 18000 }], highestBidder: demo._id, isSold: true },
   ]);
+
+  // Auctions list their products explicitly.
+  for (const auction of [ongoing, upcoming, completed]) {
+    auction.auctionProducts = auctionProducts.filter((p) => p.auction.equals(auction._id)).map((p) => p._id);
+    await auction.save();
+  }
 
   console.log(`Seeded ${products.length} products, ${categories.length} categories, 3 auctions.`);
   console.log(`Admin login: admin / ${process.env.SEED_ADMIN_PASSWORD ? "(SEED_ADMIN_PASSWORD)" : "admin123"}`);

@@ -176,7 +176,9 @@ exports.placeBid = async (req, res) => {
   }
 
   try {
-    const { bidder, bidAmount } = req.body;
+    const { bidAmount } = req.body;
+    // Always bid as the signed-in user, never as whoever the request body claims.
+    const bidder = req.auth._id;
 
     const auctionProduct = await AuctionProduct.findById(req.params.productId);
 

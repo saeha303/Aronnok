@@ -4,7 +4,8 @@ import Navbar from '../Components/Navbar/Navbar'
 import Table from '../Components/Table/Table'
 import  { useEffect, useState } from 'react';
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar';
-import '../Context/OrderListAdmin.css';
+import './OrderListAdmin.css';
+import { API } from '../backend';
 
 // const OrderlistAdmin = () => {
 //   return (
@@ -24,7 +25,7 @@ const OrderlistAdmin = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch('http://localhost:8000/api/order/all');
+          const response = await fetch(`${API}/api/order/all`);
           const data = await response.json();
           setOrderHistory(data);
         } catch (error) {

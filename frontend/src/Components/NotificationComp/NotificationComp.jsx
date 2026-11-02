@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './NotificationComp.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API } from '../../backend';
 
 const NotificationComp = (prod) => {
     const [isAction,setAction]=useState(false);
@@ -21,7 +22,7 @@ const NotificationComp = (prod) => {
     
       const onClose = async () => {
         try {
-          await axios.delete(`http://localhost:8000/api/${prod.userId}/notification/delete/${prod.id}`, {});
+          await axios.delete(`${API}/api/${prod.userId}/notification/delete/${prod.id}`, {});
           // /:userId/notification/delete/:notificationId
         } catch (error) {
           console.error('Error bidding', error);

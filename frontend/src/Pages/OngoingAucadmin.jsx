@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar';
-import '../Context/ongoingAuctionAdmin.css';
+import './ongoingAuctionAdmin.css';
 import Product from '../Components/Product/Product';
 import CountdownTimer from '../Components/CountdownTimer/CountdownTimer';
 import AdAuctionProduct from '../Components/AuctionProduct/AdAuctionProduct';
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar';
+import { API } from '../backend';
 
 const OngoingAucAdmin = () => {
   const {userId,auctionId}=useParams();
@@ -23,7 +24,7 @@ const OngoingAucAdmin = () => {
   useEffect(() => {
     const fetchTime = async ()=>{
       try {
-        const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/remainingTime`);
+        const response = await fetch(`${API}/api/auction/${auctionId}/remainingTime`);
         const data = await response.json();
         setRtime(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
         console.log(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
@@ -39,7 +40,7 @@ const OngoingAucAdmin = () => {
   useEffect(() => {
     const fetchOrder = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/auction/get-auction/${auctionId}`);
+            const response = await fetch(`${API}/api/auction/get-auction/${auctionId}`);
             const data = await response.json();
             setAuction(data);
             setDate(data.date.substring(0, 10));
@@ -52,7 +53,7 @@ const OngoingAucAdmin = () => {
 
       const fetchProducts = async ()=>{
         try {
-          const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/products`);
+          const response = await fetch(`${API}/api/auction/${auctionId}/products`);
           const data = await response.json();
           setProducts(data);
           console.log(products);
@@ -63,7 +64,7 @@ const OngoingAucAdmin = () => {
 
        const fetchTopProducts = async ()=>{
         try {
-          const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/top`);
+          const response = await fetch(`${API}/api/auction/${auctionId}/top`);
           const data = await response.json();
           setTopProducts(data);
           console.log(products);

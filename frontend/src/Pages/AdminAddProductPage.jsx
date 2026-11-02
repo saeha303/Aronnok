@@ -6,7 +6,7 @@ import AdminProductPanel from '../Components/AdminProductPanel/AdminProductPanel
 import AdminNavbar from '../Components/AdminNavbar/AdminNavbar';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import AdminNewProductAdd from '../Components/AdminNewProductAdd/AdminNewProductAdd';
-import '../Context/AdminAddProductPage.css';
+import './AdminAddProductPage.css';
 
 const AdminAddProductPage = () => {
   return (

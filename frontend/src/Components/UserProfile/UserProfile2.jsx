@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API } from '../../backend';
 
 const UserProfile2 = ({ userId }) => {
   const defaultUserPhoto =
@@ -27,7 +28,7 @@ const UserProfile2 = ({ userId }) => {
     // Fetch user information from the backend when the component mounts
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/user/${userId}`); // Replace with actual backend URL
+        const response = await axios.get(`${API}/api/user/${userId}`); // Replace with actual backend URL
         setUserInfo(response.data);
       } catch (error) {
         console.error('Error fetching user information:', error);
@@ -52,7 +53,7 @@ const UserProfile2 = ({ userId }) => {
   const handleSave = async () => {
     try {
       // Send edited user information to the backend
-      await axios.put(`http://localhost:8000/api/user/${userId}`, userInfo); // Replace with actual backend URL
+      await axios.put(`${API}/api/user/${userId}`, userInfo); // Replace with actual backend URL
       setEditing(false);
     } catch (error) {
       console.error('Error updating user information:', error);

@@ -38,7 +38,7 @@
 
 //   const handleStartAuction = async () => {
 //     try {
-//       const response = await fetch('http://localhost:8000/api/auction/create', {
+//       const response = await fetch(`${API}/api/auction/create`, {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -123,6 +123,7 @@
 import React, { useState } from 'react';
 import AuctionAddPlant from '../AuctionAddPlant/AuctionAddPlant';
 import './Auction.css';
+import { API } from '../../backend';
 
 const Auction = () => {
   const [auction, setAuction] = useState({
@@ -168,7 +169,7 @@ const Auction = () => {
 
   const handleStartAuction = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/auction/create', {
+      const response = await fetch(`${API}/api/auction/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

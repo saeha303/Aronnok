@@ -1,13 +1,14 @@
 import React, { useContext,useEffect, useState } from 'react'
 
 import CartItem from '../Components/CartItem/CartItem';
-import '../Context/ViewCart.css';
+import './ViewCart.css';
 import { CartContext } from '../Context/CartContext';
 import axios, { all } from 'axios';
 import { ProjectContext } from '../Context/ProjectContext';
 import Navbar from '../Components/Navbar/Navbar';
 import { Link, useParams } from 'react-router-dom';
 import Footer from '../Components/Footer/Footer';
+import { API } from '../backend';
 
 const ViewCart = (prod) => {
   const { userId } = useParams();
@@ -23,7 +24,7 @@ const ViewCart = (prod) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/cart/viewCart/${userId}`);
+        const response = await fetch(`${API}/api/cart/viewCart/${userId}`);
         const data = await response.json();
         setCart(data);
         setCartItems(data.items);
@@ -35,7 +36,7 @@ const ViewCart = (prod) => {
 
     const getPrice = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/product/${prod.userId}/${prod.id}`);
+        const response = await fetch(`${API}/api/product/${prod.userId}/${prod.id}`);
         const data = await response.json();
         return data.price;
       } catch (error) {
@@ -67,7 +68,7 @@ const ViewCart = (prod) => {
   const placeOrder = async () => {
     try {
       console.log(address);
-      const response=await axios.put(`http://localhost:8000/api/cart/buynow/${userId}`, {"address":address});
+      const response=await axios.put(`${API}/api/cart/buynow/${userId}`, {"address":address});
       console.log("response")
       console.log(response.data.url);
       const textUrl=response.data.url;

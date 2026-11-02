@@ -1,4 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react'
+import { API } from '../backend';
+import { getCurrentUserId } from '../session';
 // import all_plants from "../Components/Assets/all_products"
 export const CartContext= createContext(null);
 
@@ -23,7 +25,7 @@ const CartContextProvider = (props) => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch('http://localhost:8000/api/products/659c027001b07da1b7fef185');
+          const response = await fetch(`${API}/api/products/${getCurrentUserId()}`);
           const data = await response.json();
           setProducts(data);
         } catch (error) {

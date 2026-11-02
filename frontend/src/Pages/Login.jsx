@@ -2,9 +2,16 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import { API } from '../backend';
+import { saveSession } from '../session';
+
+// Accounts created by `npm run seed` so visitors can explore without signing up.
+const DEMO_ACCOUNTS = {
+  shopper: { username: 'demo', password: 'demo1234' },
+  admin: { username: 'admin', password: 'admin123' },
+};
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,31 +35,22 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const signIn = async (credentials) => {
     try {
-      // Replace 'your_backend_url' with the actual URL of your backend endpoint
-      const response = await axios.post('http://localhost:8000/api/signin', formData);
-      console.log('Form submitted:', response.data);
+      const response = await axios.post(`${API}/api/signin`, credentials);
+      const { user } = response.data;
+      saveSession(user);
       setMessage('Login successful!');
-      const userId = response.data.user._id;
-      console .log("userId", userId);
-      // // <Link to={`/home`} className='container-link' style={{ textDecoration: 'none', color: 'black' }}>
-      // // </Link>
-      if(formData.username === 'admin')
-      navigate(`/admin/allproducts`);
-      else
-      navigate(`/home/${userId}`);
-
-
-
+      navigate(user.role !== 0 ? '/admin/dashboard' : `/home/${user._id}`);
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setMessage('Username or password is incorrect.');
-      alert('Username or password is incorrect.');
-      // Handle error or show error message to the user
+      const reason = error.response?.data?.error || 'Username or password is incorrect.';
+      setMessage(reason);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signIn(formData);
   };
 
   return (
@@ -62,7 +60,7 @@ const Login = () => {
         <form id="loginForm" onSubmit={handleSubmit}>
           <div className="dont-have-an-account-sign-up-ZQx">
             <span className="dont-have-an-account-sign-up-ZQx-sub-0">Don’t have an account? </span>
-            <a href="sign-up.html" className="dont-have-an-account-sign-up-ZQx-sub-1">Sign up</a>
+            <Link to="/signup" className="dont-have-an-account-sign-up-ZQx-sub-1">Sign up</Link>
             <span className="dont-have-an-account-sign-up-ZQx-sub-2"> </span>
           </div>
 
@@ -95,6 +93,7 @@ const Login = () => {
           <div className="line-5-Aha"></div>
           <img className="vector-uQG" src="/vector-sQg.png" alt="Vector" />
           <button type="submit" className="submitButton">Log in</button>
+          {message && <p className="login-message" role="alert">{message}</p>}
         </form>
         <div className="plantys-logo-7WL">
           <img className="vector-3-qx8" src="/vector-3-SUc.png" alt="Vector" />
@@ -108,6 +107,11 @@ const Login = () => {
       </div>
       <div className="english-uk-JMr">English (UK)</div>
       <img className="polygon-1-oZW" src="/polygon-1-9or.png" alt="Polygon" />
+      <div className="demo-login-banner">
+        <span>Just looking around?</span>
+        <button type="button" onClick={() => signIn(DEMO_ACCOUNTS.shopper)}>Try as shopper</button>
+        <button type="button" onClick={() => signIn(DEMO_ACCOUNTS.admin)}>Try as admin</button>
+      </div>
     </div>
   );
 };

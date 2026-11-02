@@ -7,6 +7,7 @@ import Sidebar from '../Components/Sidebar/Sidebar';
 import PastSmallAuctionProduct from '../Components/PastSmallAuctionProduct/PastSmallAuctionProduct';
 import { useParams } from 'react-router-dom';
 import FutureReqProduct from '../Components/PastSmallAuctionProduct/FutureReqProduct';
+import { API } from '../backend';
 
 
 // const ViewAucReqPage = () => {
@@ -16,7 +17,7 @@ import FutureReqProduct from '../Components/PastSmallAuctionProduct/FutureReqPro
 //     useEffect(() => {
 //         const fetchAuctionProducts = async () => {
 //             try {
-//                 const response = await axios.get(`http://localhost:8000/api/auction/all/${auctionId}/auction-request`);
+//                 const response = await axios.get(`${API}/api/auction/all/${auctionId}/auction-request`);
 //                 console.log(auctionId);
 //                 setAuctionProducts(response.data.products); // Update 'products' based on the actual response structure
 //             } catch (error) {
@@ -55,7 +56,7 @@ const ViewAucReqPage = () => {
     useEffect(() => {
         const fetchAuctionProducts = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/auction/all/${auctionId}/auction-request`);
+                const response = await axios.get(`${API}/api/auction/all/${auctionId}/auction-request`);
                 console.log(auctionId);
 
                 // Ensure response.data.products is an array before setting the state

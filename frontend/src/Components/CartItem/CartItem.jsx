@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './CartItem.css';
 import axios from 'axios';
 import { ProjectContext } from '../../Context/ProjectContext';
+import { API } from '../../backend';
 
 const CartItem = (prod) => {
   const [product, setProduct] = useState([]);
@@ -13,7 +14,7 @@ const CartItem = (prod) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/product/${prod.userId}/${prod.id}`);
+        const response = await fetch(`${API}/api/product/${prod.userId}/${prod.id}`);
         const data = await response.json();
         setProduct(data);
       } catch (error) {
@@ -23,7 +24,7 @@ const CartItem = (prod) => {
 
     // const fetchTotalQuantity = async () => {
     //   try {
-    //     const response = await fetch(`http://localhost:8000/api/cart/getQuantity/${prod.userId}/${prod.id}`);
+    //     const response = await fetch(`${API}/api/cart/getQuantity/${prod.userId}/${prod.id}`);
     //     const data = await response.json();
     //     setQuantity(data.quantity);
     //     setPrice(Math.round(data.quantity * data.price));
@@ -40,7 +41,7 @@ const CartItem = (prod) => {
 
   const updateCart = async (newQuantity) => {
     try {
-      await axios.put(`http://localhost:8000/api/cart/update/${prod.userId}/${prod.id}`, { "quantity": newQuantity, "selected": true });
+      await axios.put(`${API}/api/cart/update/${prod.userId}/${prod.id}`, { "quantity": newQuantity, "selected": true });
       console.log('product updated in cart');
     } catch (error) {
       console.error('Error updating ', error);
@@ -70,7 +71,7 @@ const CartItem = (prod) => {
 
   const removeItem = async () => {
     try {
-      await axios.delete(`http://localhost:8000/api/cart/deleteItem/${prod.userId}/${prod.id}`, {});
+      await axios.delete(`${API}/api/cart/deleteItem/${prod.userId}/${prod.id}`, {});
       console.log('product deleted from cart');
     } catch (error) {
       console.error('Error deleting ', error);

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import AuctionSmall from '../Components/AuctionsSmall/AuctionSmall';
-import '../Context/AuctionsAll.css'
+import './AuctionsAll.css'
 import Navbar from '../Components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
 import PastAuctionSmall from '../Components/AuctionsSmall/PastAuctionSmall';
+import { API } from '../backend';
 
 const AuctionsAll = () => {
     const { userId } = useParams();
@@ -35,7 +36,7 @@ const AuctionsAll = () => {
         };
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/auctions`);
+        const response = await fetch(`${API}/api/auctions`);
         const data = await response.json();
         setAuctions(data);
         divideOrders(data);

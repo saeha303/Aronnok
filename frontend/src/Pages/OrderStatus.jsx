@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import '../Context/OrderStatus.css';
+import './OrderStatus.css';
 import Stepper from '../Components/Stepper/Stepper'
 import Navbar from '../Components/Navbar/Navbar'
 import OrderItem from '../Components/OrderItem/OrderItem';
 import { useParams } from 'react-router-dom';
 import Footer from '../Components/Footer/Footer';
+import { API } from '../backend';
 
 const OrderStatus = () => {
     const { userId, orderId } = useParams();
@@ -16,7 +17,7 @@ const OrderStatus = () => {
     // const fetchProduct = async (productId) => {
     //     try {
     //       // Assuming you have an API endpoint for fetching data based on productId
-    //       const response = await fetch(`http://localhost:8000/api/product/659c027001b07da1b7fef185/${productId}`);
+    //       const response = await fetch(`${API}/api/product/659c027001b07da1b7fef185/${productId}`);
     //       const data = await response.json();
     //       return data;
     //     } catch (error) {
@@ -29,7 +30,7 @@ const OrderStatus = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/order/particularOrder/${orderId}`);
+                const response = await fetch(`${API}/api/order/particularOrder/${orderId}`);
                 const data = await response.json();
                 console.log(data)
                 setOrder(data);

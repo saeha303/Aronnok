@@ -14,7 +14,7 @@
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
-//         const response = await fetch('http://localhost:8000/api/products/659c027001b07da1b7fef185');
+//         const response = await fetch(`${API}/api/products/659c027001b07da1b7fef185`);
 //         const data = await response.json();
 //         setProducts(data);
 //       } catch (error) {
@@ -44,6 +44,8 @@
 import React, { useEffect, useState } from 'react';
 import AdminProduct from '../AdminProduct/AdminProduct';
 import './AdminProductPanel.css';
+import { API } from '../../backend';
+import { getCurrentUserId } from '../../session';
 
 const AdminProductPanel = ({ catagory }) => {
   const [all_plants, setProducts] = useState([]);
@@ -51,7 +53,7 @@ const AdminProductPanel = ({ catagory }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/products/659c027001b07da1b7fef185');
+        const response = await fetch(`${API}/api/products/${getCurrentUserId()}`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {

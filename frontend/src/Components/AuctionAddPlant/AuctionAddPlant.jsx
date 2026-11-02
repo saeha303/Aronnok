@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import './AuctionAddPlant.css';
 import axios from 'axios';
+import { API } from '../../backend';
 
 const AuctionAddPlant = ({ auctionId}) => {
   const [productInfo, setProductInfo] = useState({
@@ -49,7 +50,7 @@ const AuctionAddPlant = ({ auctionId}) => {
       // for (const pair of formData.entries()) {
       //   console.log(pair[0], pair[1]);
       // }
-      await axios.post(`http://localhost:8000/api/auction/add-product/${auctionId}`, formData, {
+      await axios.post(`${API}/api/auction/add-product/${auctionId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

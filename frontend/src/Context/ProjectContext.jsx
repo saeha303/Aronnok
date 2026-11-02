@@ -1,4 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react'
+import { API } from '../backend';
+import { getCurrentUserId } from '../session';
 // import all_plants from "../Components/Assets/all_products"
 export const ProjectContext= createContext(null);
 
@@ -16,8 +18,9 @@ const ProjectContextProvider = (props) => {
     //     setQuantity(total);
     // }
     const updateTotalQuantity= async (items)=>{
+        if (!getCurrentUserId()) return;
         try {
-            const response = await fetch('http://localhost:8000/api/cart/viewCart/659c027001b07da1b7fef185');
+            const response = await fetch(`${API}/api/cart/viewCart/${getCurrentUserId()}`);
             const data = await response.json();
             setCart(data);
             setCartItems(data.items);

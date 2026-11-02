@@ -11,7 +11,7 @@
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
-//         const response = await fetch('http://localhost:8000/api/favourites/659c027001b07da1b7fef185');
+//         const response = await fetch(`${API}/api/favourites/659c027001b07da1b7fef185`);
 //         const data = await response.json();
 //         setProducts(data);
 //       } catch (error) {
@@ -41,21 +41,23 @@ import React, { useEffect, useState } from 'react';
 import './FavouriteItem.css';
 import Product from '../Product/Product';
 import axios from 'axios';
+import { API } from '../../backend';
+import { getCurrentUserId } from '../../session';
 
 const FavouriteItem = () => {
-  const userId = "659c027001b07da1b7fef185"; // Hardcoded user ID for demonstration
+  const userId = getCurrentUserId();
   const [favoriteProducts, setFavoriteProducts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch user's favorite plant IDs first
-        const response = await axios.get(`http://localhost:8000/api/favourites/${userId}`);
+        const response = await axios.get(`${API}/api/favourites/${userId}`);
         const { product } = response.data;
     
         // Fetch products based on the list of favorite IDs
         if (product && product.length > 0) {
-          const productResponse = await axios.post(`http://localhost:8000/api/favourites`, { favoriteIds: product });
+          const productResponse = await axios.post(`${API}/api/favourites`, { favoriteIds: product });
           setFavoriteProducts(productResponse.data);
         }
       } catch (error) {

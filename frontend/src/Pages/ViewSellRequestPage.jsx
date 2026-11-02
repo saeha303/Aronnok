@@ -8,6 +8,7 @@ import PastSmallAuctionProduct from '../Components/PastSmallAuctionProduct/PastS
 import { useParams } from 'react-router-dom';
 import FutureReqProduct from '../Components/PastSmallAuctionProduct/FutureReqProduct';
 import ViewSellRequest from '../Components/ViewSellRequest/ViewSellRequest';
+import { API } from '../backend';
 const ViewSellRequestPage = () => {
    
     const [auctionProducts, setAuctionProducts] = useState([]);
@@ -15,7 +16,7 @@ const ViewSellRequestPage = () => {
     useEffect(() => {
         const fetchAuctionProducts = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/sellRequest/getAll`);
+                const response = await axios.get(`${API}/api/sellRequest/getAll`);
               
 
                 // Ensure response.data.products is an array before setting the state

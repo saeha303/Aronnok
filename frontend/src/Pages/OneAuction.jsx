@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar';
-import '../Context/OneAuction.css';
+import './OneAuction.css';
 import Product from '../Components/Product/Product';
 import CountdownTimer from '../Components/CountdownTimer/CountdownTimer';
 import AuctionProduct from '../Components/AuctionProduct/AuctionProduct';
 import BidPopup from '../Components/BidPopup/BidPopup';
+import { API } from '../backend';
 
 const OneAuction = () => {
   const {userId,auctionId}=useParams();
@@ -22,7 +23,7 @@ const OneAuction = () => {
   useEffect(() => {
     const fetchTime = async ()=>{
       try {
-        const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/remainingTime`);
+        const response = await fetch(`${API}/api/auction/${auctionId}/remainingTime`);
         const data = await response.json();
         setRtime(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
         console.log(Number(Number(data.hour)*3600+Number(data.min)*60+Number(data.sec)));
@@ -37,7 +38,7 @@ const OneAuction = () => {
   useEffect(() => {
     const fetchOrder = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/auction/get-auction/${auctionId}`);
+            const response = await fetch(`${API}/api/auction/get-auction/${auctionId}`);
             const data = await response.json();
             setAuction(data);
             setDate(data.date.substring(0, 10));
@@ -50,7 +51,7 @@ const OneAuction = () => {
 
       const fetchProducts = async ()=>{
         try {
-          const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/products`);
+          const response = await fetch(`${API}/api/auction/${auctionId}/products`);
           const data = await response.json();
           setProducts(data);
         } catch (error) {
@@ -60,7 +61,7 @@ const OneAuction = () => {
 
        const fetchTopProducts = async ()=>{
         try {
-          const response = await fetch(`http://localhost:8000/api/auction/${auctionId}/top`);
+          const response = await fetch(`${API}/api/auction/${auctionId}/top`);
           const data = await response.json();
           setTopProducts(data);
         } catch (error) {

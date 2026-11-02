@@ -19,7 +19,7 @@
 //   useEffect(() => {
 //     const fetchAuctionProducts = async () => {
 //       try {
-//         const response = await axios.get(`http://localhost:8000/api/auction/${auctionId}/products`);
+//         const response = await axios.get(`${API}/api/auction/${auctionId}/products`);
 //         setAuctionProducts(response.data);
 //         console.log(response.data);
 //       } catch (error) {
@@ -103,6 +103,7 @@ import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Sidebar from '../Sidebar/Sidebar';
 import AuctionAddPlant from '../AuctionAddPlant/AuctionAddPlant';
 import './AdAuctionProductList.css';
+import { API } from '../../backend';
 
 const AdAuctionProductList = ({ auctionId, catagory }) => {
   const [showAddProductPopup, setShowAddProductPopup] = useState(false);
@@ -112,7 +113,7 @@ const AdAuctionProductList = ({ auctionId, catagory }) => {
   useEffect(() => {
     const fetchAuctionProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/auction/${auctionId}/products`);
+        const response = await axios.get(`${API}/api/auction/${auctionId}/products`);
         setAuctionProducts(response.data);
       } catch (error) {
         console.error('Error fetching auction products:', error);

@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import './AuctionWinitem.css'
+import { API } from '../../backend';
 
 const AuctionWinitem = (prod) => {
     const [product, setProduct] = useState([]);
 
       const pay = async () => {
           try {
-            const response=await axios.post(`http://localhost:8000/api/auction/${prod.auctionId}/${prod.id}/payment`, {});
+            const response=await axios.post(`${API}/api/auction/${prod.auctionId}/${prod.id}/payment`, {});
             const textUrl=response.data.url;
             
             window.location.href = textUrl;

@@ -5,6 +5,7 @@
 import React, { useState,onClose } from 'react';
 import './SellRequestForm.css';
 import axios from 'axios';
+import { API } from '../../backend';
 
 const SellRequestForm = ({ userId,onClose}) => {
   const [productInfo, setProductInfo] = useState({
@@ -50,7 +51,7 @@ const SellRequestForm = ({ userId,onClose}) => {
       // for (const pair of formData.entries()) {
       //   console.log(pair[0], pair[1]);
       // }
-      await axios.post(`http://localhost:8000/api/sellRequest/${userId}`, formData, {
+      await axios.post(`${API}/api/sellRequest/${userId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

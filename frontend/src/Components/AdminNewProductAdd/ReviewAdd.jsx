@@ -5,6 +5,8 @@
 import React, { useState } from 'react';
 import './ReviewAdd.css';
 import axios from 'axios';
+import { API } from '../../backend';
+import { getCurrentUserId } from '../../session';
 
 const ReviewAdd = ({pname,pdescription,pprice,pphoto,reqId}) => {
   // const [url, setUrl] = useState("");
@@ -53,7 +55,7 @@ const ReviewAdd = ({pname,pdescription,pprice,pphoto,reqId}) => {
       console.log(formData)
       
     
-      await axios.post(`http://localhost:8000/api/requestApproval/65a294c44865e9f4138c7281/${reqId}`, formData, {
+      await axios.post(`${API}/api/requestApproval/${getCurrentUserId()}/${reqId}`, formData, {
       headers: {
       'Content-Type': 'multipart/form-data',
       },

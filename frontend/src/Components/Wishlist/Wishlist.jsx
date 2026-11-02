@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, Button } from 'react-bootstrap';
 import axios from 'axios';
 import './Wishlist.css'
+import { API } from '../../backend';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import all_plants from '../Assets/all_products'
 
@@ -32,9 +33,9 @@ const Wishlist = ({ category, mypath, userId, wishlistPlantId }) => {
   const deleteFromWishlist = async (wishlistPlantId) => {
     try {
       if (category === 'Wishlist')
-        await axios.delete(`http://localhost:8000/api/wishlist/${userId}/${wishlistPlantId}`, {});
+        await axios.delete(`${API}/api/wishlist/${userId}/${wishlistPlantId}`, {});
       if (category === 'Favourites')
-        await axios.delete(`http://localhost:8000/api/favourites/${userId}/${wishlistPlantId}`, {});
+        await axios.delete(`${API}/api/favourites/${userId}/${wishlistPlantId}`, {});
     } catch (error) {
       console.error('Error deleting', error);
     }

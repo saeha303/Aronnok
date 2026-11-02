@@ -36,3 +36,46 @@
     transform: rotate(360deg);
   }
 }
+
+/* Shown while a lazily-loaded page is being fetched */
+.page-loading {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2f5d34;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 404 page */
+.not-found {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: #121414;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.not-found img {
+  width: min(240px, 60vw);
+}
+
+.not-found h1 {
+  margin: 0;
+  font-size: 64px;
+}
+
+.not-found a {
+  margin-top: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: #2f5d34;
+  color: #ffffff;
+  text-decoration: none;
+}

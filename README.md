@@ -2,7 +2,7 @@
 
 A full-stack e-commerce platform to explore, buy, sell and **bid on** rare hybrid plants, with an admin dashboard for managing products, orders, auctions and sell requests. Built as part of the Software Development Sessional.
 
-**🔗 [Live demo](aronnok.vercel.app)**  · **🎬 [Demo video](https://youtu.be/D6CSEQouq4Q)**
+**🔗 [Live demo](https://aronnok.vercel.app)**  · **🎬 [Demo video](https://youtu.be/D6CSEQouq4Q)**
 
 > **Try it without signing up:** the login page has one-click **Try as shopper** and **Try as admin** buttons.
 > (Demo accounts: `demo` / `demo1234` and `admin` / `admin123`.)

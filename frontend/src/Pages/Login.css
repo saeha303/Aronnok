@@ -468,3 +468,12 @@
   outline: 0.2rem solid #33814e;
   outline-offset: 0.1rem;
 }
+
+/* Log in button: hand cursor and a darker green on hover */
+.log-in-684 .frame-9c8 .submitButton {
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.log-in-684 .frame-9c8 .submitButton:hover {
+  background-color: #2a6b40;
+}

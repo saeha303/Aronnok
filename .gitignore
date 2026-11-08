@@ -18,3 +18,5 @@ frontend/dist/
 .vscode/
 *.log
 .DS_Store
+.vercel
+.env*

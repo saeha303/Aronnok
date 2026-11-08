@@ -1,190 +1,255 @@
-.navbar{
-    display: flex;
-    height: 50px;
-    justify-content: space-around;
-    padding: 16px;
-    box-shadow: 0 1px 3px -2px rgb(10, 10, 10);
-    /* position:fixed;
-    top:0;
-    width: 100%;
-    z-index: 5000; */
+/* Shopper navigation bar */
 
-  
-}
+.navbar {
+  --nav-green: #2f5d34;
+  --nav-green-hover: #33814e;
+  --nav-green-soft: #eaf3ec;
+  --nav-text: #2b2f2c;
+  --nav-muted: #6b716c;
+  --nav-border: #e6e9e6;
 
-.nav-logo{
-    display: flex;
-    /* justify-content: space-around; */
-    align-items: center;
-    gap: 10px;
-}
-.nav-logo img{
-    width: 50px;
-    height: 50px;
-}
-.nav-logo p{
-    color: black;
-    font-size: 38px;
-    font-weight: 600;
-}
-.nav-menu{
-    display: flex;
-    align-items: center;
-    list-style: none;
-    gap: 30px;
-    color:black;
-    font-size: 20px;
-    font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid var(--nav-border);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-.nav-menu li{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    cursor: pointer;
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 1280px;
+  height: 64px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
 }
-.nav-menu li hr {
-    display: block;
+
+/* Logo */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: var(--nav-green);
+}
+.nav-logo img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+.nav-logo span {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Menu links */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-link {
+  position: relative;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--nav-text);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s, background-color 0.15s;
+}
+.nav-link:hover {
+  color: var(--nav-green);
+  background: var(--nav-green-soft);
+}
+.nav-link.is-active {
+  color: var(--nav-green);
+  font-weight: 600;
+}
+.nav-link.is-active::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -12px;          /* sits on the bar's bottom border */
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--nav-green);
+}
+
+/* Search takes the free space between the menu and the icons */
+.nav-search {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+/* Icon buttons (notifications, cart, account, mobile menu) */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.nav-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--nav-green);
+  font-size: 20px;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.nav-icon-btn:hover,
+.nav-icon-btn.is-pressed {
+  background: var(--nav-green-soft);
+}
+.navbar a:focus-visible,
+.navbar button:focus-visible {
+  outline: 2px solid var(--nav-green-hover);
+  outline-offset: 2px;
+}
+
+.nav-badge {
+  position: absolute;
+  top: 3px;
+  right: 1px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  background: #d93025;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 13px;
+  text-align: center;
+}
+
+/* Account menu */
+.nav-user {
+  position: relative;
+}
+.nav-user-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  padding: 6px;
+  background: #ffffff;
+  border: 1px solid var(--nav-border);
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(16, 24, 18, 0.12);
+}
+.nav-user-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--nav-text);
+  font-size: 14px;
+  text-decoration: none;
+}
+.nav-user-menu a:hover {
+  background: var(--nav-green-soft);
+  color: var(--nav-green);
+}
+
+/* Mobile menu button: only shown on narrow screens */
+.nav-hamburger {
+  display: none;
+  color: var(--nav-text);
+}
+
+/* Notification popup backdrop */
+.notification-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Tablets: links move into a drop-down menu */
+@media (max-width: 960px) {
+  .navbar-inner {
+    gap: 12px;
+    padding: 0 16px;
   }
-  
-.nav-menu hr {
-    display: none; /* Hide the line by default */
-    border: none;
-    width: 80%;
-    height: 3px;
-    border-radius: 10px;
-    background: red;
-}
-
-.nav-login-cart{
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-.nav-login-cart img{
-    width: 50px;
-    height: 50px;
-    padding-right: 12px;
-}
-/* .nav-login-cart button{
-    width: 157px;
-    height: 58px;
-    outline: none;
-    border: 1px solid grey;
-    color: gray;
-    font-size: 20px;
-    font-weight: 500;
-    background: white;
-    cursor: poiner;
-} */
-
-.login-btn{
-    text-decoration: none;
-    color: rgb(54, 13, 82);
-    font-size: 20px;
-}
-.nav-cart-count{
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: -30px;
-    margin-left: -30px;
-    border: 11px;
-    font-size: 14px;
-    background-color: rgb(220, 23, 13);
-    color: white;
-}
-
-.notification-icon{
-    display: flex;
-    color: rgb(0, 100, 0);
-}
-
-.notification-count{
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0px;
-    margin-left: -26px;
-    border: 11px;
-    font-size: 14px;
-    background-color: rgb(220, 23, 13);
-    color: white;
-}
-
-.notification-overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background for the overlay */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999; /* Ensure the overlay is above other elements */
+  .nav-hamburger {
+    display: inline-flex;
+    margin-left: -8px;
   }
-  
-  /* .notification-popup{
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
-    z-index: 1000; 
-  } */
-
-  .usersearch-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    
-  }
-  
-  .usersearch-bar input[type="text"] {
-    width: 150px; /* Adjust the width as needed */
-    padding: 8px; /* Add padding for better appearance */
-  }
-  
-  .usersearch-bar button {
-    width: 80px; /* Adjust the width as needed */
-    padding: 8px; /* Add padding for better appearance */
-  }
-  
-  .navbarscrollable-box {
-    max-height: 200px; /* Set the maximum height of the scrollable box */
-    overflow-y: auto; /* Enable vertical scrolling */
-  }
-  
-  .navbarscrollable-box ul {
-    list-style-type: none; /* Remove default list styles */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Remove default margin */
-  }
-
-  .usericon-expand{
-    position: relative;
-  }
-  .navbar-user-expanded{
-    display: flex;
-    flex-direction: column;
+  .nav-menu {
+    display: none;
     position: absolute;
-    top: 100%; 
+    top: 100%;
     left: 0;
-    z-index: 1;
-    list-style: none;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    height: auto;
-    width: 150px;
-    background-color: white;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 8px 12px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--nav-border);
+    box-shadow: 0 12px 20px rgba(16, 24, 18, 0.08);
   }
+  .nav-menu.is-open {
+    display: flex;
+  }
+  .nav-link {
+    padding: 12px;
+  }
+  .nav-link.is-active {
+    background: var(--nav-green-soft);
+  }
+  .nav-link.is-active::after {
+    display: none;
+  }
+}
+
+/* Phones: search gets its own row under the bar */
+@media (max-width: 640px) {
+  .navbar-inner {
+    flex-wrap: wrap;
+    height: auto;
+    row-gap: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .nav-logo span {
+    font-size: 20px;
+  }
+  .nav-actions {
+    margin-left: auto;
+  }
+  .nav-search {
+    order: 10;
+    flex-basis: 100%;
+  }
+}

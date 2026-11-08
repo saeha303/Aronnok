@@ -1,147 +1,183 @@
-import React, { useContext, useEffect, useState } from 'react'
-import './Navbar.css'
-import logo from '../Assets/aronnok-logo.png'
-import cart_icon from '../Assets/cart-icon.jpg'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import './Navbar.css';
+import logo from '../Assets/aronnok-logo.png';
 import { signOut } from '../../session';
-import { CartContext } from '../../Context/CartContext'
-import axios from 'axios';
-import UserNotification from '../UserNotification/UserNotification'
-import SearchDropDown from '../SearchDropDown/SearchDropDown'
+import UserNotification from '../UserNotification/UserNotification';
+import SearchDropDown from '../SearchDropDown/SearchDropDown';
 import { API } from '../../backend';
 
-const Navbar = ({ userId,menuPassed="default" }) => {
+// How often the cart and notification badges refresh.
+const POLL_MS = 5000;
+
+// Main menu. `match` lists the URL prefixes that count as being on that page,
+// so the current page is highlighted wherever the user came from.
+const MENU = [
+  { key: 'home', label: 'Home', to: (id) => `/home/${id}`, match: ['/home/'] },
+  { key: 'auctions', label: 'Auctions', to: (id) => `/auctionsall/${id}`, match: ['/auctionsall/', '/auction/'] },
+  { key: 'favourites', label: 'Favourites', to: (id) => `/favourites/${id}`, match: ['/favourites/'] },
+  { key: 'wishlist', label: 'Wishlist', to: (id) => `/wishlist/${id}`, match: ['/wishlist/'] },
+  { key: 'orders', label: 'Orders', to: (id) => `/orderlist/${id}`, match: ['/orderlist/', '/orderstatus/'] },
+];
+
+// Closes a popup when the user clicks outside `ref` or presses Escape.
+function useDismiss(ref, open, onClose) {
+  useEffect(() => {
+    if (!open) return undefined;
+    const onPointer = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('mousedown', onPointer);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onPointer);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [ref, open, onClose]);
+}
+
+const Badge = ({ count, label }) =>
+  count > 0 ? (
+    <span className="nav-badge" aria-label={`${count} ${label}`}>
+      {count > 99 ? '99+' : count}
+    </span>
+  ) : null;
+
+const Navbar = ({ userId }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const [cartCount, setCartCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isNotificationsOpen, setNotificationsOpen] = useState(false);
+  const [isUserMenuOpen, setUserMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const userMenuRef = useRef(null);
+  useDismiss(userMenuRef, isUserMenuOpen, () => setUserMenuOpen(false));
+
+  // Close the mobile menu after navigating.
+  useEffect(() => { setMobileMenuOpen(false); }, [pathname]);
+
+  useEffect(() => {
+    if (!userId) return undefined;
+
+    const fetchCounts = async () => {
+      try {
+        const response = await fetch(`${API}/api/cart/viewCart/${userId}`);
+        const data = await response.json();
+        setCartCount((data.items ?? []).reduce((total, item) => total + item.quantity, 0));
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+      try {
+        const response = await fetch(`${API}/api/notification/${userId}`);
+        const data = await response.json();
+        setUnreadCount((data.messages ?? []).filter((message) => !message.read).length);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchCounts();
+    const intervalId = setInterval(fetchCounts, POLL_MS);
+    return () => clearInterval(intervalId);
+  }, [userId]);
+
   const handleLogout = async (e) => {
     e.preventDefault();
     await signOut().catch(() => {});
     navigate('/login', { replace: true });
   };
-  const [menu, setMenu] = useState(menuPassed);
-  const [cartTotalQuantity, setQuantity] = useState(0);
-  const [notis, setNotis] = useState([]);
-  const [query,setQuery]=useState('');
-  const [suggestions,setSuggestions]=useState([]);
-  const [isPopupOpen, setPopupOpen] = useState(false);
-  const [isUserExpanded, setUserExpanded] = useState(false);
 
-  const openPopup = () => {
-    setPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setPopupOpen(false);
-  };
-
-
-  // const handleChange = async (event) => {
-  //   const { value } = event.target;
-  //   setQuery(value);
-
-  //   try {
-  //     const response = await fetch(`${API}/api/search?query=${query}`);
-  //     const data = await response.json();
-  //     setSuggestions(data);
-  //   } catch (error) {
-  //     console.error('Error fetching suggestions:', error);
-  //   }
-  // };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${API}/api/cart/viewCart/${userId}`);
-        const data = await response.json();
-        const totalQuantity = data.items.reduce((total, item) => total + item.quantity, 0);
-        setQuantity(totalQuantity);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    const fetchNotification = async () => {
-      try {
-        const response = await fetch(`${API}/api/notification/${userId}`);
-        const data = await response.json();
-        setNotis(data.messages);
-      } catch (error) {
-        console.error('Error fetching product data:', error);
-      }
-    };
-
-
-
-    const intervalId = setInterval(() => {
-      fetchData();
-      fetchNotification();
-    }, 5000);
-
-    return () => clearInterval(intervalId);
-
-  }, []);
-
-  const changeUserExpanded = async () => {
-    setUserExpanded((stat)=>{return !stat})
-  };
+  const isActive = (item) => item.match.some((prefix) => pathname.startsWith(prefix));
 
   return (
-    <div className='navbar'>
-      <div className='nav-logo'>
-        <img src={logo} alt="" />
-        <p>Aronnok</p>
-      </div>
-      <ul className="nav-menu">
-        <li onClick={() => { setMenu("home") }}><Link to={`/home/${userId}`} style={{ textDecoration: 'none' }}>Home </Link> {menu === "home" ? <hr /> : <></>}</li>
-        <li onClick={() => { setMenu("favourites") }}><Link to={`/favourites/${userId}`} style={{ textDecoration: 'none' }}> Favourites </Link>  {menu === "favourites" ? <hr /> : <></>}</li>
-        <li onClick={() => { setMenu("wishlist") }}><Link to={`/wishlist/${userId}`} style={{ textDecoration: 'none' }}> Wishlist </Link>  {menu === "wishlist" ? <hr /> : <></>}</li>
-        <li onClick={() => { setMenu("orders") }}><Link to={`/orderlist/${userId}`} style={{ textDecoration: 'none' }}>Order </Link> {menu === "orders" ? <hr /> : <></>}</li>
-      </ul>
+    <header className="navbar">
+      <div className="navbar-inner">
+        <button
+          type="button"
+          className="nav-icon-btn nav-hamburger"
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="nav-menu"
+          onClick={() => setMobileMenuOpen((open) => !open)}
+        >
+          <i className={isMobileMenuOpen ? 'bi bi-x-lg' : 'bi bi-list'} aria-hidden="true" />
+        </button>
 
-      <div className="usersearch-bar">
-        {/* <input type="text" placeholder="Search" value={query} onChange={handleChange} required />
-        <div className="navbarscrollable-box">
-          <ul>
-            {suggestions.map((suggestion, index) => (
-              <li key={index}>{suggestion.name}</li>
+        <Link to={`/home/${userId}`} className="nav-logo">
+          <img src={logo} alt="" />
+          <span>Aronnok</span>
+        </Link>
+
+        <nav aria-label="Main">
+          <ul id="nav-menu" className={`nav-menu${isMobileMenuOpen ? ' is-open' : ''}`}>
+            {MENU.map((item) => (
+              <li key={item.key}>
+                <Link
+                  to={item.to(userId)}
+                  className={`nav-link${isActive(item) ? ' is-active' : ''}`}
+                  aria-current={isActive(item) ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              </li>
             ))}
           </ul>
-        </div>
-        <button className="usersearchbutton" type="button">Search</button> */}
-        <SearchDropDown userId={userId}/>
-      </div>
+        </nav>
 
-      <div className="nav-login-cart" style={{marginRight:'-40px'}}>
-        <div className="notification-icon"><button style={{ backgroundColor: "white", fontSize: '30px' }} onClick={openPopup}><i class="bi bi-bell-fill" style={{ color: 'rgb(0, 100, 0)', fontSize: '25px' }}></i></button>
-          <div className="notification-count" style={{ fontSize: '10px' }}>{notis.length}</div>
+        <div className="nav-search">
+          <SearchDropDown userId={userId} />
         </div>
 
-        <Link to={`/viewcart/${userId}`}> <i class="bi bi-cart-fill" style={{ color: 'rgb(0, 100, 0)', fontSize: '28px' }}></i></Link>
-        {/* <Link to='/' className='login-btn'>Logout</Link> */}
-        <div className="nav-cart-count" style={{ fontSize: '10px' }}>
-          {cartTotalQuantity}
-        </div>
+        <div className="nav-actions">
+          <button
+            type="button"
+            className="nav-icon-btn"
+            aria-label="Notifications"
+            onClick={() => setNotificationsOpen(true)}
+          >
+            <i className="bi bi-bell" aria-hidden="true" />
+            <Badge count={unreadCount} label="unread" />
+          </button>
 
-        <div className="usericon-expand">
-          <button onClick={changeUserExpanded} style={{backgroundColor:"transparent"}}><i class="bi bi-person-circle" style={{ color: 'rgb(0, 0, 0)', fontSize: '28px' }}></i></button>
-          {/* <button onClick={changeUserExpanded} style={{backgroundColor:"transparent"}}><img src="/us.png" alt="" style={{ width: '30px', height: '30px'}} /></button> */}
-            {isUserExpanded && (
-              <div className="navbar-user-expanded">
-                <Link to={`/profile/${userId}`} style={{ textDecoration: 'none' }}><p style={{ marginLeft:"10px"}}>Profile</p></Link>
-                <Link to="/login" onClick={handleLogout} style={{ textDecoration: 'none' }}><p style={{ marginLeft:"10px"}}>Log out</p></Link>
+          <Link to={`/viewcart/${userId}`} className="nav-icon-btn" aria-label="Cart">
+            <i className="bi bi-cart3" aria-hidden="true" />
+            <Badge count={cartCount} label="items in cart" />
+          </Link>
+
+          <div className="nav-user" ref={userMenuRef}>
+            <button
+              type="button"
+              className={`nav-icon-btn${isUserMenuOpen ? ' is-pressed' : ''}`}
+              aria-label="Account"
+              aria-haspopup="menu"
+              aria-expanded={isUserMenuOpen}
+              onClick={() => setUserMenuOpen((open) => !open)}
+            >
+              <i className="bi bi-person-circle" aria-hidden="true" />
+            </button>
+            {isUserMenuOpen && (
+              <div className="nav-user-menu" role="menu">
+                <Link to={`/profile/${userId}`} role="menuitem" onClick={() => setUserMenuOpen(false)}>
+                  <i className="bi bi-person" aria-hidden="true" /> Profile
+                </Link>
+                <a href="/login" role="menuitem" onClick={handleLogout}>
+                  <i className="bi bi-box-arrow-right" aria-hidden="true" /> Log out
+                </a>
               </div>
             )}
+          </div>
         </div>
-        
       </div>
-      {isPopupOpen && (
+
+      {isNotificationsOpen && (
         <div className="notification-overlay">
-
-          <UserNotification userId={userId} onClose={closePopup} />
-
+          <UserNotification userId={userId} onClose={() => setNotificationsOpen(false)} />
         </div>
       )}
-    </div>
-  )
-}
+    </header>
+  );
+};
 
-export default Navbar
+export default Navbar;
